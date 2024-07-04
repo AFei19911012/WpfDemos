@@ -1,0 +1,92 @@
+﻿<local:CustomWindow
+    x:Class="CustomWindowDemo.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:CustomWindowDemo"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="MainWindow"
+    Width="1073"
+    Height="627"
+    Icon="/logo.png"
+    mc:Ignorable="d">
+    <local:CustomWindow.Resources>
+        <Grid x:Key="CustomCaptionBar">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                Margin="5"
+                Padding="2"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel Orientation="Horizontal">
+                    <Polygon Points="0,6 6,0 6,12" Fill="White" VerticalAlignment="Center"/>
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="返回" />
+                </StackPanel>
+            </Button>
+            <TextBlock
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="White"
+                Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}" />
+            <Button
+                Grid.Column="2"
+                Margin="5"
+                Padding="2"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                FontSize="14"
+                Foreground="White"
+                WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,4,0"
+                        VerticalAlignment="Center"
+                        Text="Admin" />
+                    <Polyline
+                        VerticalAlignment="Center"
+                        Points="0,0 5,5 10,0"
+                        Stroke="White"
+                        StrokeThickness="2" />
+                </StackPanel>
+            </Button>
+        </Grid>
+    </local:CustomWindow.Resources>
+
+    <Grid>
+        <StackPanel
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            ButtonBase.Click="StackPanel_Click"
+            Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=local:CustomWindow}, Path=Foreground}" />
+                    <Setter Property="Padding" Value="10" />
+                    <Setter Property="Margin" Value="5" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="FontSize" Value="22" />
+                </Style>
+            </StackPanel.Resources>
+            <Button CommandParameter="1">可以最小化(ResizeMode="CanMinimize")</Button>
+            <Button CommandParameter="2">不可调整大小(ResizeMode="NoResize")</Button>
+            <Button CommandParameter="3">可以调整大小(ResizeMode="CanResize")</Button>
+            <Button CommandParameter="4">自定义标题栏</Button>
+            <Button CommandParameter="5">自定义Window模板</Button>
+        </StackPanel>
+    </Grid>
+</local:CustomWindow>

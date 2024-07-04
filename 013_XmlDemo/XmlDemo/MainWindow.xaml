@@ -1,0 +1,17 @@
+﻿<Window x:Class="XmlDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XmlDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Background="White" Content="新建元素" Padding="8,4" Margin="5" FontSize="20" Click="Button1_Click"/>
+        <Button Background="White" Content="新增元素" Padding="8,4" Margin="5" FontSize="20" Click="Button2_Click"/>
+        <Button Background="White" Content="修改元素" Padding="8,4" Margin="5" FontSize="20" Click="Button3_Click"/>
+        <Button Background="White" Content="删除元素" Padding="8,4" Margin="5" FontSize="20" Click="Button4_Click"/>
+        <Button Background="White" Content="序列化" Padding="8,4" Margin="5" FontSize="20" Click="Button5_Click"/>
+        <Button Background="White" Content="反序列化" Padding="8,4" Margin="5" FontSize="20" Click="Button6_Click"/>
+    </StackPanel>
+</Window>

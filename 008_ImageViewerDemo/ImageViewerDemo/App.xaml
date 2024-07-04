@@ -1,0 +1,165 @@
+﻿<Application x:Class="ImageViewerDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ImageViewerDemo"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="{x:Type local:ImageViewer}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type local:ImageViewer}">
+                            <Canvas x:Name="PART_Canvas">
+                                <Canvas.Background>
+                                    <DrawingBrush RenderOptions.CachingHint="Cache" Stretch="None" TileMode="Tile"
+                                                  Viewport="0,0,32,32" ViewportUnits="Absolute">
+                                        <DrawingBrush.Drawing>
+                                            <DrawingGroup>
+                                                <GeometryDrawing Brush="#141414">
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry Rect="0,0,64,64" />
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+                                                <GeometryDrawing Brush="#1F1F1F">
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry Rect="0,0,32,32" />
+                                                            <RectangleGeometry Rect="32,32,32,32" />
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+                                            </DrawingGroup>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </Canvas.Background>
+                                <!--<Image Name="Part_Image" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="{TemplateBinding Source}"/>-->
+                                <Grid ClipToBounds="{TemplateBinding ClipToBounds}">
+                                    <Image Name="Part_Image" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="{TemplateBinding Source}"/>
+                                    <StackPanel Name="toolBar" Orientation="Horizontal" Opacity="0"
+                                                HorizontalAlignment="Center" VerticalAlignment="Bottom" 
+                                                Margin="0,0,15,0" >
+
+                                        <StackPanel.Background>
+                                            <LinearGradientBrush>
+                                                <GradientStop Color="#EAE5C9" Offset="0"/>
+                                                <GradientStop Color="#6CC6CB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </StackPanel.Background>
+
+                                        <StackPanel.Resources>
+                                            <ControlTemplate TargetType="Separator" x:Key="simpleSeparator">
+                                                <Border SnapsToDevicePixels="True" 
+                                                        Width="{TemplateBinding Width}"
+                                                        Height="{TemplateBinding Height}"
+                                                        BorderThickness="{TemplateBinding Border.BorderThickness}" 
+                                                        BorderBrush="{TemplateBinding Border.BorderBrush}" 
+                                                        Background="{TemplateBinding Panel.Background}" >
+                                                </Border>
+                                            </ControlTemplate>
+
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="BorderThickness" Value="0"/>
+                                                <Setter Property="Padding" Value="2"/>
+                                                <Setter Property="Margin" Value="3"/>
+                                            </Style>
+
+                                            <Style TargetType="Path">
+                                                <Setter Property="Fill" Value="White"/>
+                                                <Setter Property="Width" Value="16"/>
+                                                <Setter Property="Stretch" Value="Uniform"/>
+                                            </Style>
+
+                                        </StackPanel.Resources>
+
+                                        <Button Command="local:TransformCommands.MoveLeft">
+                                            <Path Data="M896 544H250.4l242.4 242.4L448 832 173.6 557.6 128 512l45.6-45.6L448 192l45.6 45.6L250.4 480H896v64z" />
+                                        </Button>
+
+                                        <Button Command="local:TransformCommands.MoveRight">
+                                            <Path Data="M128 480h645.6L530.4 237.6 576 192l274.4 274.4L896 512l-45.6 45.6L576 832l-45.6-45.6L773.6 544H128v-64z"/>
+                                        </Button>
+
+                                        <Button Command="local:TransformCommands.MoveUp">
+                                            <Path Data="M480 896V250.4L237.6 493.6 192 448l274.4-274.4L512 128l45.6 45.6L832 448l-45.6 45.6L544 250.4V896h-64z"/>
+                                        </Button>
+
+                                        <Button Command="local:TransformCommands.MoveDown">
+                                            <Path Data="M544 128v645.6l242.4-242.4L832 576l-274.4 274.4L512 896l-45.6-45.6L192 576l45.6-45.6L480 773.6V128h64z" />
+                                        </Button>
+
+                                        <Separator Width="1" Template="{StaticResource simpleSeparator}"/>
+
+                                        <Button Command="local:TransformCommands.RotateLeft">
+                                            <Path Data="M64 536.6c0.6-19.4 2.5-38.8 5.5-58l143 17.6c-1 13.5-1.2 27-0.5 40.4H64zM81.7 423.2c10.3-36.3 25.1-71.3 43.7-103.8l117.3 62.1c-11.4 24.2-19.7 49.6-24.9 75.5L81.7 423.2zM156.1 272.6c22.3-29.9 48.1-56.9 76.6-80.4l80.4 91c-19.6 19-36.7 40.2-51 63l-106-73.6zM277.4 159.7c31-19.8 64.3-35.8 98.9-47.6L415.2 215a336.57 336.57 0 0 0-71.1 41.5l-66.7-96.8zM429.1 97.8c35.6-7.4 71.9-10.4 107.8-9.1v98.6c-28.1 1.3-55.9 5.8-82.5 13.6L429.1 97.8zM590.5 93.8c35.5 5.5 70.2 15.4 103 29.2l-31 81.6c-27.1-8.9-55.2-14.5-83.4-16.6l11.4-94.2zM741.3 146.6c30.8 17.6 59.3 38.9 84.7 63.1l-50.3 56.8c-22.6-18.3-47.2-33.8-73.2-46l38.8-73.9zM861.8 248.2c22.3 27 41.2 56.5 56.2 87.8l-57 30c-14.9-25.5-32.8-49-53.1-70l53.9-47.8zM937.7 384c11.1 32.7 18.2 66.7 21 100.8l-52.8 6.4c-4.9-29.6-13.3-58.4-25-85.6l56.8-21.6zM960 535.9c-1.2 34-6.5 67.8-15.7 100.3l-40.6-9.9c6-29.8 8.2-60.2 6.9-90.3l49.4-0.1zM927.6 684c-13 31-29.8 60.3-49.7 87l-25.1-17.2c16.4-26.1 29.6-54.1 39.2-83.1l35.6 13.3zM845.7 809c-22.9 24-48.5 45.2-76.2 62.9l-10.9-15.6c25-18.9 47.5-40.8 67.1-64.9l20 17.6zM726.6 895.9c-29.5 14.2-60.5 24.7-92.3 31.3l-1.9-7.4c30.5-8.9 59.8-21.5 87-37.4l7.2 13.5zM586.1 934.2c-16.5 1.4-33 1.7-49.5 1.1 16.4-0.6 32.8-2.3 49-4.9l0.5 3.8z"/>
+                                        </Button>
+
+                                        <TextBlock />
+
+                                        <Button Command="local:TransformCommands.RotateRight">
+                                            <Path Data="M158.6,104.8c0.1-2.6,0.1-5.3-0.1-7.9l27.9-3.4c0.6,3.8,1,7.5,1.1,11.3H158.6z M157.5,89.3c-1-5.1-2.6-10-4.9-14.7  l22.9-12.1c3.6,6.3,6.5,13.2,8.5,20.3L157.5,89.3z M148.8,67.6c-2.8-4.5-6.1-8.6-10-12.3l15.7-17.8c5.6,4.6,10.6,9.9,15,15.7  L148.8,67.6z M132.8,50.1c-4.3-3.3-8.9-6-13.9-8.1l7.6-20.1c6.8,2.3,13.3,5.4,19.3,9.3C145.8,31.2,132.8,50.1,132.8,50.1z   M111.3,39.2c-5.2-1.5-10.6-2.4-16.1-2.7V17.3c7-0.3,14.1,0.3,21.1,1.8L111.3,39.2z M86.9,36.7c-5.5,0.4-11,1.5-16.3,3.2L64.6,24  c6.4-2.7,13.2-4.6,20.1-5.7L86.9,36.7z M62.8,43.1c-5.1,2.4-9.9,5.4-14.3,9L38.7,41c5-4.7,10.5-8.9,16.5-12.3L62.8,43.1z M31.7,48.5  l10.5,9.3c-4,4.1-7.5,8.7-10.4,13.7l-11.1-5.9C23.6,59.5,27.3,53.8,31.7,48.5L31.7,48.5z M27.9,79.2c-2.3,5.3-3.9,10.9-4.9,16.7  l-10.3-1.3c0.5-6.7,1.9-13.3,4.1-19.7C16.9,75,27.9,79.2,27.9,79.2z M12.5,104.7l9.6,0c-0.3,5.9,0.2,11.8,1.3,17.6l-7.9,1.9  C13.8,117.9,12.7,111.3,12.5,104.7L12.5,104.7z M25.8,131c1.9,5.7,4.5,11.1,7.7,16.2l-4.9,3.4c-3.9-5.2-7.2-10.9-9.7-17L25.8,131z   M34.8,158l3.9-3.4c3.8,4.7,8.2,9,13.1,12.7l-2.1,3C44.3,166.8,39.3,162.7,34.8,158L34.8,158z M58.1,175l1.4-2.6  c5.3,3.1,11,5.6,17,7.3l-0.4,1.4C69.9,179.8,63.8,177.8,58.1,175L58.1,175z M85.5,182.5l0.1-0.7c3.2,0.5,6.4,0.8,9.6,1  C92,182.8,88.8,182.7,85.5,182.5L85.5,182.5z"/>
+                                        </Button>
+
+                                        <Separator Width="1" Template="{StaticResource simpleSeparator}"/>
+
+                                        <Button Command="local:TransformCommands.Enlarge">
+                                            <Path>
+                                                <Path.Data>
+                                                    <GeometryGroup>
+                                                        <PathGeometry Figures="M763.221333 702.848L981.333333 921.002667 921.002667 981.333333l-218.154667-218.112A403.626667 403.626667 0 0 1 448 853.333333a405.333333 405.333333 0 1 1 405.333333-405.333333 403.626667 403.626667 0 0 1-90.112 254.848zM448 768a320 320 0 1 0 0-640 320 320 0 0 0 0 640z"/>
+                                                        <PathGeometry Figures="M490.666667 405.333333h128v85.333334h-128v128h-85.333334v-128h-128v-85.333334h128v-128h85.333334z"/>
+                                                    </GeometryGroup>
+                                                </Path.Data>
+                                            </Path>
+                                        </Button>
+
+                                        <TextBlock />
+
+                                        <Button Command="local:TransformCommands.Reduce">
+                                            <Path>
+                                                <Path.Data>
+                                                    <GeometryGroup>
+                                                        <PathGeometry Figures="M763.221333 702.848L981.333333 921.002667 921.002667 981.333333l-218.154667-218.112A403.626667 403.626667 0 0 1 448 853.333333a405.333333 405.333333 0 1 1 405.333333-405.333333 403.626667 403.626667 0 0 1-90.112 254.848zM448 768a320 320 0 1 0 0-640 320 320 0 0 0 0 640z"/>
+                                                        <PathGeometry Figures="M277.333333 512v-85.333333h341.333334v85.333333z"/>
+                                                    </GeometryGroup>
+                                                </Path.Data>
+                                            </Path>
+                                        </Button>
+
+                                        <Separator Width="1" Template="{StaticResource simpleSeparator}"/>
+
+                                        <Button Command="local:TransformCommands.FlipX">
+                                            <Path Data="M507.164444 913.92h398.222223l-397.653334-796.444444v796.444444M450.275556 913.92h-398.222223l398.222223-796.444444v796.444444m-42.382223-56.888889v-568.888889l-284.444444 568.888889h284.444444"/>
+                                        </Button>
+
+                                        <Button Command="local:TransformCommands.FlipY">
+                                            <Path Data="M724.48 202.808889l-224.142222 206.791111L275.911111 202.808889h448.568889m145.635556-56.888889h-739.555556l369.777778 341.333333 369.777778-341.333333zM500.337778 544.142222l-369.777778 341.333334h739.555556l-369.777778-341.333334z" />
+                                        </Button>
+
+                                        <Separator Width="1" Template="{StaticResource simpleSeparator}"/>
+
+                                        <Button Command="local:TransformCommands.Reset">
+                                            <Path Data="M750.72 170.666667h-111.061333V85.333333h256.170666v256.256h-85.290666V231.424l-196.010667 195.157333-60.16-60.458666 196.352-195.498667z m-0.64 640l-195.712-195.84 60.330667-60.288L810.666667 750.677333v-110.848H896V896h-256.341333v-85.333333h110.421333zM170.666667 750.677333l195.413333-196.096 60.416 60.245334L231.168 810.666667h110.506667V896H85.333333v-256.170667h85.290667v110.805334zM170.666667 230.613333v111.061334H85.333333V85.333333h254.506667v85.333334H231.424L426.666667 366.421333 366.250667 426.666667z"/>
+                                        </Button>
+
+                                    </StackPanel>
+                                </Grid>
+                            </Canvas>
+                            
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="toolBar" Property="Opacity" Value="1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

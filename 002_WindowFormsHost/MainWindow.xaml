@@ -1,0 +1,24 @@
+﻿<Window x:Class="WindowFormsHost.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+        xmlns:local="clr-namespace:WindowFormsHost"
+        xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Title="MainWindow"
+        Height="600" Width="800">
+    <StackPanel Orientation="Vertical">
+        <Button Content="弹窗" HorizontalAlignment="Center"
+                Margin="20" Click="Button_Click" />
+        <wff:WindowsFormsHostContainer>
+            <wff:WindowsFormsHostContainer.HostContent>
+                <wfi:WindowsFormsHost>
+                    <wf:MonthCalendar />
+                </wfi:WindowsFormsHost>
+            </wff:WindowsFormsHostContainer.HostContent>
+        </wff:WindowsFormsHostContainer>
+    </StackPanel>
+</Window>

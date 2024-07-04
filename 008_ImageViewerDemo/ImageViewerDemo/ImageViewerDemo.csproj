@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<BaseOutputPath>bin</BaseOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<OutputPath>$(BaseOutputPath)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="1.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="1.png" />
+	</ItemGroup>
+
+</Project>

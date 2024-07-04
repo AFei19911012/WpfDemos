@@ -1,0 +1,91 @@
+﻿<Window x:Class="AvalonDockDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AvalonDockDemo"
+        xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <WrapPanel Margin="5" Orientation="Horizontal">
+                <wff:Button Content="New" Click="ButNew_Click"/>
+                <wff:Button Content="Load" Click="ButLoad_Click"/>
+                <wff:Button Content="Save" Click="ButSave_Click"/>
+                <wff:Button Content="Vs2013DarkTheme" Click="ButTheme_Click"/>
+                <wff:Button Content="Vs2013LightTheme" Click="ButTheme_Click"/>
+                <wff:Button Content="Vs2013BlueTheme" Click="ButTheme_Click"/>
+            </WrapPanel>
+            <DockingManager x:Name="dockManager"
+                            Grid.Row="1"
+                            AllowMixedOrientation="True"
+                            AutoWindowSizeWhenOpened="True"
+                            DocumentClosing="DockManager_DocumentClosing"
+                            IsVirtualizingAnchorable="True"
+                            IsVirtualizingDocument="True">
+                <DockingManager.Theme>
+                    <Vs2013LightTheme />
+                </DockingManager.Theme>
+                <DockingManager.DocumentHeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Margin="0,0,4,0" Source="{Binding IconSource}" Height="14" Width="14" Stretch="Uniform"/>
+                            <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </DockingManager.DocumentHeaderTemplate>
+                
+                <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
+                    <LayoutPanel Orientation="Horizontal">
+                        <LayoutDocumentPaneGroup>
+                            <LayoutDocumentPane x:Name="LayoutDocumentPane">
+                                <LayoutDocument Title="Document 1" ContentId="document1"
+                                                IconSource="/AvalonDockDemo;component/W.png">
+                                    <wff:TextBox Grid.Row="1" Text="Document 1 Content" />
+                                </LayoutDocument>
+                                <LayoutDocument Title="Document 2" ContentId="document2">
+                                    <wff:TextBox Text="document2" Title="Content"/>
+                                </LayoutDocument>
+                            </LayoutDocumentPane>
+                        </LayoutDocumentPaneGroup>
+
+                        <LayoutAnchorablePaneGroup DockWidth="200">
+                            <LayoutAnchorablePane>
+                                <LayoutAnchorable Title="Tool Window 1" ContentId="toolWindow1" Hiding="OnToolWindow1Hiding">
+                                    <StackPanel MinHeight="450">
+                                        <wff:TextBox Text="toolWindow1" Title="Content"/>
+                                    </StackPanel>
+                                </LayoutAnchorable>
+                                <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
+                                    <TextBlock Text="toolWindow2" />
+                                </LayoutAnchorable>
+                            </LayoutAnchorablePane>
+                        </LayoutAnchorablePaneGroup>
+                    </LayoutPanel>
+
+                    <LayoutRoot.LeftSide>
+                        <LayoutAnchorSide>
+                            <LayoutAnchorGroup>
+                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide1 Content" ContentId="AutoHide1Content">
+                                    <wff:TextBox Text="AutoHide1Content" Title="Content"/>
+                                </LayoutAnchorable>
+
+                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide2 Content" ContentId="AutoHide2Content">
+                                    <StackPanel Orientation="Vertical">
+                                        <wff:TextBox Text="AutoHide2Content-1" Title="Content"/>
+                                        <wff:TextBox Text="AutoHide2Content-2" Title="Content"/>
+                                    </StackPanel>
+                                </LayoutAnchorable>
+                            </LayoutAnchorGroup>
+                        </LayoutAnchorSide>
+                    </LayoutRoot.LeftSide>
+                </LayoutRoot>
+            </DockingManager>
+        </Grid>
+    </Grid>
+</Window>

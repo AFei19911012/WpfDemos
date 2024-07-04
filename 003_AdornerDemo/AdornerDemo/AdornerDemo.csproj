@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<BaseOutputPath>bin</BaseOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<OutputPath>$(BaseOutputPath)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="DragCanvas.xaml.cs~RF2bfa51e.TMP" />
+	  <None Remove="Resource\1.png" />
+	  <None Remove="Resource\DevOps-Repos.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resource\1.png" />
+	  <Resource Include="Resource\DevOps-Repos.png" />
+	</ItemGroup>
+
+</Project>

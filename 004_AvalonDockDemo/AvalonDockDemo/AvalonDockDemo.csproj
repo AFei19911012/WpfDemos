@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<BaseOutputPath>..\bin</BaseOutputPath>
+		 <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		 <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		 <OutputPath>$(BaseOutputPath)</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="W.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="AvalonDock">
+	    <HintPath>..\..\..\Dlls\AvalonDock.dll</HintPath>
+	  </Reference>
+	  <Reference Include="AvalonDock.Themes.VS2013">
+	    <HintPath>..\..\..\Dlls\AvalonDock.Themes.VS2013.dll</HintPath>
+	  </Reference>
+	  <Reference Include="WffControls">
+	    <HintPath>..\..\..\WffControls\bin\WffControls.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="W.png" />
+	</ItemGroup>
+
+</Project>

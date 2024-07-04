@@ -1,0 +1,32 @@
+﻿<Window x:Class="WatsonTcpDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WatsonTcpDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <UniformGrid Columns="2">
+            <UniformGrid Rows="4" Margin="10">
+                <Button Content="启动服务器" Click="OnStartServer"/>
+                <Button Content="发送文本" Click="OnServerSendText"/>
+                <Button Content="发送Metadata" Click="OnServerSendMetadata"/>
+                <Button Content="发送消息并返回信息" Click="OnServerSendAndResponse"/>
+            </UniformGrid>
+
+            <UniformGrid Rows="4" Margin="10">
+                <Button Content="连接服务器" Click="OnConnectServer"/>
+                <Button Content="发送文本" Click="OnClientSendText"/>
+                <Button Content="发送Metadata" Click="OnClientSendMetadata"/>
+                <Button Content="发送消息并返回信息" Click="OnClientSendAndResponse"/>
+            </UniformGrid>
+        </UniformGrid>
+
+        <ListBox Name="lb" Grid.Row="1" Height="200"/>
+    </Grid>
+</Window>
