@@ -11,6 +11,8 @@ namespace SqlSugarCoreDemo
         public MainWindow()
         {
             InitializeComponent();
+
+            Init();
         }
 
         /// <summary>
@@ -29,10 +31,16 @@ namespace SqlSugarCoreDemo
             return db;
         }
 
-        private void ButtonNew_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 初始化数据库
+        /// </summary>
+        private void Init()
         {
+            // 创建数据库
             var db = CreateDB();
-            db.Ado.ExecuteCommand("VACUUM");
+            // 建库
+            db.DbMaintenance.CreateDatabase();
+            // 建表
             db.CodeFirst.InitTables(typeof(Table_Demo));
 
             // 查询数据
@@ -40,15 +48,18 @@ namespace SqlSugarCoreDemo
             // 如果没有数据则初始化数据
             if (list.Count == 0)
             {
+                lb.Items.Add("初始化数据库");
                 for (int i = 0; i < 5; i++)
                 {
-                    db.Insertable(new Table_Demo()
+                    var data = new Table_Demo()
                     {
                         Uid = Guid.NewGuid().ToString(),
                         Name = "default",
                         Remark = "",
                         IsChecked = false,
-                    }).ExecuteCommand();
+                    };
+                    db.Insertable(data).ExecuteCommand();
+                    lb.Items.Add(data.ToString());
                 }
             }
         }
@@ -84,7 +95,12 @@ namespace SqlSugarCoreDemo
         {
             var db = CreateDB();
             var list = db.Queryable<Table_Demo>().ToList();
-            MessageBox.Show(string.Format("现有数据 {0} 条", list.Count));
+            lb.Items.Add(string.Format("现有数据 {0} 条", list.Count));
+
+            foreach (var item in list)
+            {
+                lb.Items.Add(item.ToString());
+            }
         }
     }
 }

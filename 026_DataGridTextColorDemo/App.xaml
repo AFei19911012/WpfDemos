@@ -1,0 +1,17 @@
+﻿<Application x:Class="DataGridTextColorDemo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:DataGridTextColorDemo"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <local:ValueToNgConverter x:Key="ValueToNg"/>
+        <local:StrValueToValueConverter x:Key="StrValueToValue"/>
+        <Style x:Key="MyDataGridCellSytleNG" TargetType="DataGridCell">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Value, Converter={StaticResource ValueToNg}}" Value="NG">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>

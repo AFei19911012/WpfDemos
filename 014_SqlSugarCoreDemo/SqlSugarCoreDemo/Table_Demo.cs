@@ -19,5 +19,11 @@ namespace SqlSugarCoreDemo
 
         [SugarColumn(ColumnName = "IsChecked", ColumnDataType = "bool")]
         public bool IsChecked { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"Uid = {Uid}, Name = {Name}, Remark = {Remark}, IsChecked = {IsChecked}";
+        }
     }
 }
