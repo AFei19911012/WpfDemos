@@ -1,0 +1,47 @@
+﻿<Window x:Class="GridSplitterDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GridSplitterDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Margin="3" Content="left" />
+            <GridSplitter Grid.Row="1" Height="3"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Stretch" ShowsPreview="False" />
+            <Button Grid.Row="2" Margin="3"
+                Content="left" />
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="3"
+          VerticalAlignment="Stretch"
+          HorizontalAlignment="Center" ShowsPreview="False" />
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button Margin="3" Content="right" />
+            <GridSplitter Grid.Row="1" Height="3"
+          VerticalAlignment="Center"
+          HorizontalAlignment="Stretch" ShowsPreview="False" />
+            <Button Grid.Row="2" Margin="3"
+                Content="right" />
+        </Grid>
+    </Grid>
+</Window>

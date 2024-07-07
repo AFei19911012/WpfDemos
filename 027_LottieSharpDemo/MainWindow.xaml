@@ -1,0 +1,23 @@
+﻿<Window x:Class="LottieSharpDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LottieSharpDemo"
+        xmlns:lottie="clr-namespace:LottieSharp.WPF;assembly=LottieSharp"
+        mc:Ignorable="d" Title="MainWindow"
+        Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <lottie:LottieAnimationView x:Name="PART_Lottie" HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" Width="500"
+                                    Height="400" AutoPlay="True"
+                                    RepeatCount="-1" FileName="Resource\无人机.json" />
+
+        <Button Grid.Row="1" Content="换一个"
+                Padding="5" Click="Button_Click" />
+    </Grid>
+</Window>
