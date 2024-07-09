@@ -4,7 +4,7 @@
 
 using System;
 
-namespace TextParsing
+namespace SoftCircuits.Parsing.Helper
 {
     /// <summary>
     /// Represents a line and column position within a string.

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using TextParsing;
+using SoftCircuits.Parsing.Helper;
 
 namespace ParsingHelperDemo
 {

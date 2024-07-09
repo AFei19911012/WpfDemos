@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 //
 
-namespace TextParsing
+namespace SoftCircuits.Parsing.Helper
 {
     /// <summary>
     /// Specifies options for the <see cref="ParsingHelper.SkipWhiteSpace(SkipWhiteSpaceOption)"/>

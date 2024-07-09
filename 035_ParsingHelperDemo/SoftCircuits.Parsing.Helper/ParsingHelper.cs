@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace TextParsing
+namespace SoftCircuits.Parsing.Helper
 {
     /// <summary>
     /// Low-level text parsing helper class.
