@@ -36,4 +36,6 @@ WPF 测试项目，第三方库使用案例
 33. IniFileParser 读写 ini 文件；
 34. IniParser 读写 ini 文件；
 35. ParsingHelper 文本解析方法；
-36. 
+36. OrderedDictionary 有序字典；
+37. ExpressionEvaluator 表达式计算；
+38. 
