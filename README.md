@@ -34,3 +34,6 @@ WPF 测试项目，第三方库使用案例
 31. GridSplitter 布局；
 32. IniFile 读写 ini 文件；
 33. IniFileParser 读写 ini 文件；
+34. IniParser 读写 ini 文件；
+35. ParsingHelper 文本解析方法；
+36. 
