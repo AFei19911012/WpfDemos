@@ -41,4 +41,5 @@ WPF 测试项目，第三方库使用案例
 38. FixedWidthParser 指定宽度数据文件读写
 39. EasyEncryption 加密
 40. WinSettings 加密保存 ini、xml、注册表
-41. 
+41. SimpleLogFile 简单日志
+42. 
