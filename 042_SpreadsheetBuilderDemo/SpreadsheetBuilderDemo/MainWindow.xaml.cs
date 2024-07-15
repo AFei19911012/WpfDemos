@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Spreadsheet;
 using SoftCircuits.Spreadsheet;
 using System.Windows;
 
@@ -18,11 +19,11 @@ namespace SpreadsheetBuilderDemo
 
         private void Init()
         {
-            string Filename = "TestExcel.xlsx";
+            string filename = "TestExcel.xlsx";
 
             SpreadsheetBuilder.ValidationExceptions = SaveValidation.DebugOnly;
 
-            using SpreadsheetBuilder builder = SpreadsheetBuilder.Create(Filename);
+            using SpreadsheetBuilder builder = SpreadsheetBuilder.Create(filename);
             SpreadsheetStyles styles = new(builder);
 
             // Table columns
@@ -83,6 +84,63 @@ namespace SpreadsheetBuilderDemo
                 table.BuildTable($"ItemsTable{i}", styles.ItemsTableStyle);
             }
             builder.Save();
+
+
+
+            filename = "test2.xlsx";
+            using SpreadsheetBuilder builder2 = SpreadsheetBuilder.Create(filename);
+            builder2.SetCell("A1", "Hello, World!");
+            builder2.SetCell("B5", 123.45);
+            builder2.SetCell(new CellReference(2, 5), 123.45);
+            builder2.SetCell("C17", new CellFormula("SUM(A1:C16)"));
+            builder2.SetCell("A7", 123.45, builder.CellStyles[StandardCellStyle.Currency]);
+            uint bold = builder2.CellStyles.Register(new CellFormat()
+            {
+                FontId = builder2.FontStyles[StandardFontStyle.Bold],
+                ApplyFont = BooleanValue.FromBoolean(true),
+            });
+
+            uint header = builder2.CellStyles.Register(new CellFormat()
+            {
+                FontId = builder2.FontStyles[StandardFontStyle.Header],
+                ApplyFont = BooleanValue.FromBoolean(true)
+            });
+
+            uint subheader = builder2.CellStyles.Register(new CellFormat()
+            {
+                FontId = builder2.FontStyles[StandardFontStyle.Subheader],
+                ApplyFont = BooleanValue.FromBoolean(true)
+            });
+
+            uint headerRight = builder2.CellStyles.Register(new CellFormat()
+            {
+                FontId = builder2.FontStyles[StandardFontStyle.Header],
+                ApplyFont = BooleanValue.FromBoolean(true),
+                Alignment = new() { Horizontal = HorizontalAlignmentValues.Right },
+                ApplyAlignment = BooleanValue.FromBoolean(true)
+            });
+
+            uint subheaderRight = builder2.CellStyles.Register(new CellFormat()
+            {
+                FontId = builder2.FontStyles[StandardFontStyle.Subheader],
+                ApplyFont = BooleanValue.FromBoolean(true),
+                Alignment = new() { Horizontal = HorizontalAlignmentValues.Right },
+                ApplyAlignment = BooleanValue.FromBoolean(true)
+            });
+
+            builder2.SetCell("D22", "Header", header);
+
+            string[] headers = new string[]
+            {
+              "Column1",
+              "Column2",
+              "Column3"
+            };
+
+            TableBuilder table2 = new(builder2, "A4", headers);
+            table2.AddRow("Abc", 123, 123.45m);
+            table2.AddRow("Def", 456, 4000m);
+            table2.BuildTable("MyTableName", ExcelTableStyle.MediumBlue6);
         }
     }
 }
