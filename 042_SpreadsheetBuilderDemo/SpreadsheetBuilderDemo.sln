@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetBuilderDemo", "SpreadsheetBuilderDemo\SpreadsheetBuilderDemo.csproj", "{157E73DA-A799-42C3-B6AF-C764865F863E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{157E73DA-A799-42C3-B6AF-C764865F863E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157E73DA-A799-42C3-B6AF-C764865F863E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157E73DA-A799-42C3-B6AF-C764865F863E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157E73DA-A799-42C3-B6AF-C764865F863E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5226C523-B8D2-451E-AC99-2D7AA6ABDDC4}
+	EndGlobalSection
+EndGlobal
