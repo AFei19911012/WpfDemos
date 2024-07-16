@@ -20,11 +20,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Reference Include="AvalonDock">
-	    <HintPath>..\..\..\Dlls\AvalonDock.dll</HintPath>
-	  </Reference>
-	  <Reference Include="AvalonDock.Themes.VS2013">
-	    <HintPath>..\..\..\Dlls\AvalonDock.Themes.VS2013.dll</HintPath>
+	  <ProjectReference Include="..\AvalonDock.Themes.VS2013\AvalonDock.Themes.VS2013.csproj" />
+	  <ProjectReference Include="..\AvalonDock\AvalonDock.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="MLib">
+	    <HintPath>..\..\..\Dlls\MLib.dll</HintPath>
 	  </Reference>
 	  <Reference Include="WffControls">
 	    <HintPath>..\..\..\WffControls\bin\WffControls.dll</HintPath>

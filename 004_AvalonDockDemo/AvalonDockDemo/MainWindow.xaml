@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AvalonDockDemo"
         xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        mc:Ignorable="d" Title="MainWindow"
+        Height="450" Width="800">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -14,15 +14,14 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <WrapPanel Margin="5" Orientation="Horizontal">
-                <wff:Button Content="New" Click="ButNew_Click"/>
-                <wff:Button Content="Load" Click="ButLoad_Click"/>
-                <wff:Button Content="Save" Click="ButSave_Click"/>
-                <wff:Button Content="Vs2013DarkTheme" Click="ButTheme_Click"/>
-                <wff:Button Content="Vs2013LightTheme" Click="ButTheme_Click"/>
-                <wff:Button Content="Vs2013BlueTheme" Click="ButTheme_Click"/>
+                <wff:Button Content="New" Click="ButNew_Click" />
+                <wff:Button Content="Load" Click="ButLoad_Click" />
+                <wff:Button Content="Save" Click="ButSave_Click" />
+                <wff:Button Content="Vs2013DarkTheme" Click="ButTheme_Click" />
+                <wff:Button Content="Vs2013LightTheme" Click="ButTheme_Click" />
+                <wff:Button Content="Vs2013BlueTheme" Click="ButTheme_Click" />
             </WrapPanel>
-            <DockingManager x:Name="dockManager"
-                            Grid.Row="1"
+            <DockingManager x:Name="dockManager" Grid.Row="1"
                             AllowMixedOrientation="True"
                             AutoWindowSizeWhenOpened="True"
                             DocumentClosing="DockManager_DocumentClosing"
@@ -34,12 +33,17 @@
                 <DockingManager.DocumentHeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Margin="0,0,4,0" Source="{Binding IconSource}" Height="14" Width="14" Stretch="Uniform"/>
-                            <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                            <Image Margin="0,0,4,0"
+                                   Source="{Binding IconSource}"
+                                   Height="14" Width="14"
+                                   Stretch="Uniform" />
+                            <TextBlock Text="{Binding Title}"
+                                       TextTrimming="CharacterEllipsis"
+                                       VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </DockingManager.DocumentHeaderTemplate>
-                
+
                 <LayoutRoot PropertyChanged="OnLayoutRootPropertyChanged">
                     <LayoutPanel Orientation="Horizontal">
                         <LayoutDocumentPaneGroup>
@@ -49,16 +53,17 @@
                                     <wff:TextBox Grid.Row="1" Text="Document 1 Content" />
                                 </LayoutDocument>
                                 <LayoutDocument Title="Document 2" ContentId="document2">
-                                    <wff:TextBox Text="document2" Title="Content"/>
+                                    <wff:TextBox Text="document2" Title="Content" />
                                 </LayoutDocument>
                             </LayoutDocumentPane>
                         </LayoutDocumentPaneGroup>
 
                         <LayoutAnchorablePaneGroup DockWidth="200">
                             <LayoutAnchorablePane>
-                                <LayoutAnchorable Title="Tool Window 1" ContentId="toolWindow1" Hiding="OnToolWindow1Hiding">
+                                <LayoutAnchorable Title="Tool Window 1" ContentId="toolWindow1"
+                                                  Hiding="OnToolWindow1Hiding">
                                     <StackPanel MinHeight="450">
-                                        <wff:TextBox Text="toolWindow1" Title="Content"/>
+                                        <wff:TextBox Text="toolWindow1" Title="Content" />
                                     </StackPanel>
                                 </LayoutAnchorable>
                                 <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
@@ -71,14 +76,16 @@
                     <LayoutRoot.LeftSide>
                         <LayoutAnchorSide>
                             <LayoutAnchorGroup>
-                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide1 Content" ContentId="AutoHide1Content">
-                                    <wff:TextBox Text="AutoHide1Content" Title="Content"/>
+                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide1 Content"
+                                                  ContentId="AutoHide1Content">
+                                    <wff:TextBox Text="AutoHide1Content" Title="Content" />
                                 </LayoutAnchorable>
 
-                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide2 Content" ContentId="AutoHide2Content">
+                                <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide2 Content"
+                                                  ContentId="AutoHide2Content">
                                     <StackPanel Orientation="Vertical">
-                                        <wff:TextBox Text="AutoHide2Content-1" Title="Content"/>
-                                        <wff:TextBox Text="AutoHide2Content-2" Title="Content"/>
+                                        <wff:TextBox Text="AutoHide2Content-1" Title="Content" />
+                                        <wff:TextBox Text="AutoHide2Content-2" Title="Content" />
                                     </StackPanel>
                                 </LayoutAnchorable>
                             </LayoutAnchorGroup>

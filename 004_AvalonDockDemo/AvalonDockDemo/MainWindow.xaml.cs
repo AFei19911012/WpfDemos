@@ -66,14 +66,17 @@ namespace AvalonDockDemo
             string name = (sender as Button).Content.ToString();
             if (name.Equals("Vs2013DarkTheme"))
             {
+                Application.Current.Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/MLib;component/Themes/DarkTheme.xaml");
                 dockManager.Theme = new Vs2013DarkTheme();
             }
             else if (name.Equals("Vs2013LightTheme"))
             {
+                Application.Current.Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/MLib;component/Themes/LightTheme.xaml");
                 dockManager.Theme = new Vs2013LightTheme();
             }
             else
             {
+                Application.Current.Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/MLib;component/Themes/LightTheme.xaml");
                 dockManager.Theme = new Vs2013BlueTheme();
             }
         }
