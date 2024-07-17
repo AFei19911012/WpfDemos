@@ -16,6 +16,8 @@ namespace AvalonDockDemo
         public MainWindow()
         {
             InitializeComponent();
+
+            SetTheme("Vs2013LightTheme");
         }
 
         private void ButNew_Click(object sender, RoutedEventArgs e)
@@ -64,12 +66,17 @@ namespace AvalonDockDemo
         private void ButTheme_Click(object sender, RoutedEventArgs e)
         {
             string name = (sender as Button).Content.ToString();
-            if (name.Equals("Vs2013DarkTheme"))
+            SetTheme(name);
+        }
+
+        private void SetTheme(string key)
+        {
+            if (key.Equals("Vs2013DarkTheme"))
             {
                 Application.Current.Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/MLib;component/Themes/DarkTheme.xaml");
                 dockManager.Theme = new Vs2013DarkTheme();
             }
-            else if (name.Equals("Vs2013LightTheme"))
+            else if (key.Equals("Vs2013LightTheme"))
             {
                 Application.Current.Resources.MergedDictionaries[0].Source = new Uri("pack://application:,,,/MLib;component/Themes/LightTheme.xaml");
                 dockManager.Theme = new Vs2013LightTheme();
@@ -84,7 +91,7 @@ namespace AvalonDockDemo
         private void DockManager_DocumentClosing(object sender, AvalonDock.DocumentClosingEventArgs e)
         {
             var result = DialogHelper.Ask("Are you sure you want to close the document?");
-            if (result == MessageBoxResult.No)
+            if (result == MessageBoxResult.Cancel)
             {
                 e.Cancel = true;
             }
@@ -93,7 +100,7 @@ namespace AvalonDockDemo
         private void OnToolWindow1Hiding(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var result = DialogHelper.Ask("Are you sure you want to hide this tool?");
-            if (result == MessageBoxResult.No)
+            if (result == MessageBoxResult.Cancel)
             {
                 e.Cancel = true;
             }
