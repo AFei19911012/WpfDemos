@@ -43,5 +43,6 @@ WPF 测试项目，第三方库使用案例
 40. WinSettings 加密保存 ini、xml、注册表；
 41. SimpleLogFile 简单日志；
 42. SpreadsheetBuilder 轻量级 xlsx 文件读写；
-43. InputSimulator 模拟键盘输入；
-44. 
+43. InputSimulator 模拟鼠标、键盘事件；
+44. Bogus 生成模拟数据；
+45. 

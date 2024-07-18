@@ -1,0 +1,43 @@
+{
+   "address": {
+      "street_suffix": [
+         "straat",
+         "laan",
+         "gracht",
+         "weg",
+         "plantsoen",
+         "passage",
+         "steeg",
+         "kade",
+         "park",
+         "rijk",
+         "sloot",
+         "velt",
+         "plein",
+         "dijk",
+         "markt",
+         "hof",
+         "plein"
+      ]
+   },
+   "company": {
+      "suffix": [
+         "Bank",
+         "BV",
+         "B.V.",
+         "NV",
+         "N.V.",
+         "V.O.F.",
+         "International",
+         "Groep",
+         "Group",
+         "HRM",
+         "ICT",
+         "IT",
+         "Maatschappij",
+         "Online",
+         "en Zonen"
+      ]
+   }
+
+}

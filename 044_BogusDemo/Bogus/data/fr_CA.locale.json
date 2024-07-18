@@ -1,0 +1,82 @@
+{
+  "title": "French (Canada)",
+  "address": {
+    "postcode": [
+      "A#? #?#",
+      "B#? #?#",
+      "C#? #?#",
+      "E#? #?#",
+      "G#? #?#",
+      "H#? #?#",
+      "J#? #?#",
+      "K#? #?#",
+      "L#? #?#",
+      "M#? #?#",
+      "N#? #?#",
+      "P#? #?#",
+      "R#? #?#",
+      "S#? #?#",
+      "T#? #?#",
+      "V#? #?#",
+      "X#? #?#",
+      "Y#? #?#"
+    ],
+    "state": [
+      "Alberta",
+      "Colombie-Britannique",
+      "Manitoba",
+      "Nouveau-Brunswick",
+      "Terre-Neuve-et-Labrador",
+      "Nouvelle-Écosse",
+      "Territoires du Nord-Ouest",
+      "Nunavut",
+      "Ontario",
+      "Île-du-Prince-Édouard",
+      "Québec",
+      "Saskatchewan",
+      "Yukon"
+    ],
+    "state_abbr": [
+      "AB",
+      "BC",
+      "MB",
+      "NB",
+      "NL",
+      "NS",
+      "NU",
+      "NT",
+      "ON",
+      "PE",
+      "QC",
+      "SK",
+      "YK"
+    ],
+    "default_country": [
+      "Canada"
+    ]
+  },
+  "internet": {
+    "free_email": [
+      "gmail.com",
+      "yahoo.ca",
+      "hotmail.com"
+    ],
+    "domain_suffix": [
+      "qc.ca",
+      "ca",
+      "com",
+      "biz",
+      "info",
+      "name",
+      "net",
+      "org"
+    ]
+  },
+  "phone_number": {
+    "formats": [
+      "### ###-####",
+      "1 ### ###-####",
+      "### ###-####, poste ###"
+    ]
+  }
+}
