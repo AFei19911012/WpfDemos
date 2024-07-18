@@ -38,8 +38,10 @@ WPF 测试项目，第三方库使用案例
 35. ParsingHelper 文本解析方法；
 36. OrderedDictionary 有序字典；
 37. ExpressionEvaluator 表达式计算；
-38. FixedWidthParser 指定宽度数据文件读写
-39. EasyEncryption 加密
-40. WinSettings 加密保存 ini、xml、注册表
-41. SimpleLogFile 简单日志
-42. 
+38. FixedWidthParser 指定宽度数据文件读写；
+39. EasyEncryption 加密；
+40. WinSettings 加密保存 ini、xml、注册表；
+41. SimpleLogFile 简单日志；
+42. SpreadsheetBuilder 轻量级 xlsx 文件读写；
+43. InputSimulator 模拟键盘输入；
+44. 
