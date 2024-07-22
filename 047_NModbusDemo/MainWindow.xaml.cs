@@ -51,7 +51,6 @@ namespace NModbusDemo
             server?.WriteBool(13, [true, true, true, true, true]);
 
             server?.WriteFloat(20, 3.14159f);
-            server?.WriteFloat(23, [1.2f, 2.3f, 3.4f]);
 
             server?.WriteString(30, "test test test test");
 
@@ -90,14 +89,6 @@ namespace NModbusDemo
 
                 var f = server.ReadFloat(20);
                 PrintLog("服务器读取 20：" + f);
-
-                var fs = server.ReadFloat(23, 3);
-                str = "";
-                foreach (var item in fs)
-                {
-                    str += item + " ";
-                }
-                PrintLog("服务器读取 23：" + str);
 
                 str = server.ReadString(30);
                 PrintLog("服务器读取 30：" + str);
