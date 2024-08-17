@@ -1,0 +1,30 @@
+﻿<Window x:Class="MatrixRainDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MatrixRainDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Background="Black">
+        <local:MatrixRain x:Name="mRain" HorizontalAlignment="Left"
+                               Height="524" Margin="10,35,0,0"
+                               VerticalAlignment="Top" Width="1172"/>
+        <WrapPanel Orientation="Horizontal">
+            <Button Content="Start" Click="OnStartRain" />
+            <Button Content="Stop" Click="OnStopRain" />
+            <Button Content="Font" Click="OnSetFont" />
+            <Button Content="Set1" Click="OnSetColor"
+                    Background="Lime" />
+            <Button Content="Set2" Click="OnSetColor">
+                <Button.Background>
+                    <RadialGradientBrush GradientOrigin="0.5,0.5">
+                        <GradientStop Color="Yellow" Offset="0" />
+                        <GradientStop Color="Orange" Offset="0.5" />
+                        <GradientStop Color="Red" Offset="1" />
+                    </RadialGradientBrush>
+                </Button.Background>
+            </Button>
+        </WrapPanel>
+    </Grid>
+</Window>
