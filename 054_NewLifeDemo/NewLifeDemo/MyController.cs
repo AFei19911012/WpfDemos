@@ -2,7 +2,7 @@
 using NewLife.Data;
 using System.Text;
 
-namespace NewLiftDemo
+namespace NewLifeDemo
 {
     ///
 	/// ----------------------------------------------------------------

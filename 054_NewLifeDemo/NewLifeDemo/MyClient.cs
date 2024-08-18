@@ -1,7 +1,7 @@
 ﻿using NewLife.Data;
 using NewLife.Remoting;
 
-namespace NewLiftDemo
+namespace NewLifeDemo
 {
     ///
 	/// ----------------------------------------------------------------

@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Windows;
 
-namespace NewLiftDemo
+namespace NewLifeDemo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

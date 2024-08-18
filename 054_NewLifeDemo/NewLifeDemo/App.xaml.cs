@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace NewLiftDemo
+namespace NewLifeDemo
 {
     /// <summary>
     /// Interaction logic for App.xaml

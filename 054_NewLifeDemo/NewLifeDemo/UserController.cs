@@ -2,7 +2,7 @@
 using NewLife.Remoting;
 using NewLife.Security;
 
-namespace NewLiftDemo
+namespace NewLifeDemo
 {
     ///
 	/// ----------------------------------------------------------------
