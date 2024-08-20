@@ -54,4 +54,7 @@ WPF 测试项目，第三方库使用案例
 51. 使用 Mutex 判断程序是否多开；
 52. 文字雨；
 53. 在线程里加载图像并显示；
-54. 
+54. NewLife.Net 远程调用协议RPC；
+55. FileSystemWatcher 监控文件；
+56. 使用 NewLife.Net 传输文件；
+57. 
