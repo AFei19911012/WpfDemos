@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="WpfDragDrop\Icons\EffectCopy.png" />
+    <None Remove="WpfDragDrop\Icons\EffectLink.png" />
+    <None Remove="WpfDragDrop\Icons\EffectMove.png" />
+    <None Remove="WpfDragDrop\Icons\EffectNone.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WffControls">
+      <HintPath>..\..\..\Dlls\WffControls.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="WpfDragDrop\Icons\EffectCopy.png" />
+    <Resource Include="WpfDragDrop\Icons\EffectLink.png" />
+    <Resource Include="WpfDragDrop\Icons\EffectMove.png" />
+    <Resource Include="WpfDragDrop\Icons\EffectNone.png" />
+  </ItemGroup>
+
+</Project>
