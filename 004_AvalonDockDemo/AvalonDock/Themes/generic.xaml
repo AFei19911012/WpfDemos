@@ -15,7 +15,6 @@
                     xmlns:avalonDockControls="clr-namespace:AvalonDock.Controls"
                     xmlns:avalonDockConverters="clr-namespace:AvalonDock.Converters"
                     xmlns:avalonDockLayout="clr-namespace:AvalonDock.Layout"
-                    xmlns:avalonDockProperties="clr-namespace:AvalonDock.Properties"
                     xmlns:shell="clr-namespace:Microsoft.Windows.Shell">
 
     <!--  DocumentPaneControlStyle  -->
@@ -294,7 +293,7 @@
                                                                DropDownContextMenuDataContext="{Binding Path=LayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
                                                                Focusable="False"
                                                                Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
-                                                               ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_CxMenu_Hint}">
+                                                               ToolTip="窗口位置">
                                 <Border Background="Transparent">
                                     <Image Source="/AvalonDock;component/Themes/Generic/Images/PinMenu.png" />
                                 </Border>
@@ -304,7 +303,7 @@
                                     Command="{Binding Path=LayoutItem.AutoHideCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                     Focusable="False"
                                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                    ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnAutoHide_Hint}"
+                                    ToolTip="自动隐藏"
                                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                 <Border Background="Transparent">
                                     <Image Source="/AvalonDock;component/Themes/Generic/Images/PinAutoHide.png" />
@@ -315,7 +314,7 @@
                                     Command="{Binding Path=LayoutItem.HideCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                     Focusable="False"
                                     Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                    ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnClose_Hint}"
+                                    ToolTip="隐藏"
                                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                 <Border Background="Transparent">
                                     <Image Source="/AvalonDock;component/Themes/Generic/Images/PinClose.png" />
@@ -335,7 +334,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Model.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                             <Setter TargetName="PART_HidePin" Property="Command" Value="{Binding Path=LayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="PART_HidePin" Property="ToolTip" Value="{x:Static avalonDockProperties:Resources.Document_Close}" />
+                            <Setter TargetName="PART_HidePin" Property="ToolTip" Value="关闭" />
 
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -544,14 +543,14 @@
     </DataTemplate>
 
     <ContextMenu x:Key="AnchorableContextMenu">
-        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_Float}" />
-        <MenuItem Command="{Binding Path=DockCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_Dock}" />
-        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_DockAsDocument}" />
-        <MenuItem Command="{Binding Path=AutoHideCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_AutoHide}" />
+        <MenuItem Command="{Binding Path=FloatCommand}" Header="浮动" />
+        <MenuItem Command="{Binding Path=DockCommand}" Header="停靠" />
+        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="作为选项卡式停靠" />
+        <MenuItem Command="{Binding Path=AutoHideCommand}" Header="自动隐藏" />
         <MenuItem Command="{Binding Path=CloseCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_Close}"
+                  Header="关闭"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
-        <MenuItem Command="{Binding Path=HideCommand}" Header="{x:Static avalonDockProperties:Resources.Anchorable_Hide}">
+        <MenuItem Command="{Binding Path=HideCommand}" Header="隐藏">
             <MenuItem.Visibility>
                 <MultiBinding Converter="{avalonDockConverters:AnchorableContextMenuHideVisibilityConverter}">
                     <Binding Converter="{avalonDockConverters:BoolToVisibilityConverter}"
@@ -565,23 +564,23 @@
 
     <ContextMenu x:Key="DocumentContextMenu">
         <MenuItem Command="{Binding Path=CloseCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_Close}"
+                  Header="关闭"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
-        <MenuItem Command="{Binding Path=CloseAllButThisCommand}" Header="{x:Static avalonDockProperties:Resources.Document_CloseAllButThis}" />
-        <MenuItem Command="{Binding Path=CloseAllCommand}" Header="{x:Static avalonDockProperties:Resources.Document_CloseAll}" />
-        <MenuItem Command="{Binding Path=FloatCommand}" Header="{x:Static avalonDockProperties:Resources.Document_Float}" />
-        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="{x:Static avalonDockProperties:Resources.Document_DockAsDocument}" />
+        <MenuItem Command="{Binding Path=CloseAllButThisCommand}" Header="除此之外全部关闭" />
+        <MenuItem Command="{Binding Path=CloseAllCommand}" Header="关闭所有" />
+        <MenuItem Command="{Binding Path=FloatCommand}" Header="浮动" />
+        <MenuItem Command="{Binding Path=DockAsDocumentCommand}" Header="作为选项卡式停靠" />
         <MenuItem Command="{Binding Path=NewHorizontalTabGroupCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_NewHorizontalTabGroup}"
+                  Header="新建水平标签组"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
         <MenuItem Command="{Binding Path=NewVerticalTabGroupCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_NewVerticalTabGroup}"
+                  Header="新建垂直标签组"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
         <MenuItem Command="{Binding Path=MoveToNextTabGroupCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_MoveToNextTabGroup}"
+                  Header="移到下一标签组"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
         <MenuItem Command="{Binding Path=MoveToPreviousTabGroupCommand}"
-                  Header="{x:Static avalonDockProperties:Resources.Document_MoveToPreviousTabGroup}"
+                  Header="移到上一标签组"
                   Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}" />
     </ContextMenu>
 
@@ -692,7 +691,7 @@
                                 <Button x:Name="DocumentCloseButton" Grid.Column="2"
                                         Command="{Binding Path=LayoutItem.CloseCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                         Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                        ToolTip="{x:Static avalonDockProperties:Resources.Document_Close}"
+                                        ToolTip="关闭"
                                         Visibility="Hidden">
                                     <Image Source="/AvalonDock;component/Themes/Generic/Images/PinClose.png" />
                                 </Button>
@@ -719,7 +718,7 @@
                                 <Condition Binding="{Binding Path=CanHide}" Value="true" />
                             </MultiDataTrigger.Conditions>
                             <Setter TargetName="DocumentCloseButton" Property="Command" Value="{Binding Path=LayoutItem.HideCommand, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="DocumentCloseButton" Property="ToolTip" Value="{x:Static avalonDockProperties:Resources.Anchorable_Hide}" />
+                            <Setter TargetName="DocumentCloseButton" Property="ToolTip" Value="隐藏" />
                         </MultiDataTrigger>
                         <!--  BD: 17.08.2020 hide button if both CanClose=false and CanHide=false  -->
                         <MultiDataTrigger>
@@ -866,7 +865,7 @@
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Window_Maximize}"
+                                            ToolTip="最大化"
                                             Visibility="{Binding IsMaximized, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:InverseBoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinMaximize.png" />
                                     </Button>
@@ -877,7 +876,7 @@
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Window_Restore}"
+                                            ToolTip="还原"
                                             Visibility="{Binding IsMaximized, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinRestore.png" />
                                     </Button>
@@ -887,7 +886,7 @@
                                             Command="{Binding Path=CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Document_Close}"
+                                            ToolTip="关闭"
                                             Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinClose.png" />
                                     </Button>
@@ -957,7 +956,7 @@
                                                                        DropDownContextMenuDataContext="{Binding Path=SingleContentLayoutItem, RelativeSource={RelativeSource TemplatedParent}}"
                                                                        Focusable="False"
                                                                        Style="{StaticResource {x:Static ToolBar.ToggleButtonStyleKey}}"
-                                                                       ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_CxMenu_Hint}"
+                                                                       ToolTip="窗口位置"
                                                                        Visibility="{Binding Path=Model.IsSinglePane, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinMenu.png" />
                                     </avalonDockControls:DropDownButton>
@@ -968,7 +967,7 @@
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Window_Maximize}"
+                                            ToolTip="最大化"
                                             Visibility="{Binding IsMaximized, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:InverseBoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinMaximize.png" />
                                     </Button>
@@ -979,7 +978,7 @@
                                             CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Window_Restore}"
+                                            ToolTip="还原"
                                             Visibility="{Binding IsMaximized, RelativeSource={RelativeSource TemplatedParent}, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinRestore.png" />
                                     </Button>
@@ -989,7 +988,7 @@
                                             Command="{Binding HideWindowCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                             Focusable="False"
                                             Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                                            ToolTip="{x:Static avalonDockProperties:Resources.Anchorable_BtnClose_Hint}"
+                                            ToolTip="隐藏"
                                             Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={avalonDockConverters:BoolToVisibilityConverter}}">
                                         <Image Source="/AvalonDock;component/Themes/Generic/Images/PinClose.png" />
                                     </Button>
@@ -1007,7 +1006,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Model.SinglePane.SelectedContent.CanClose, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                             <Setter TargetName="CloseButton" Property="Command" Value="{Binding CloseWindowCommand, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="CloseButton" Property="ToolTip" Value="{x:Static avalonDockProperties:Resources.Document_Close}" />
+                            <Setter TargetName="CloseButton" Property="ToolTip" Value="关闭" />
 
                         </DataTrigger>
                     </ControlTemplate.Triggers>
@@ -1079,9 +1078,9 @@
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
                                         <TextBlock Margin="0,3,0,4" FontWeight="Bold"
-                                                   Text="{x:Static avalonDockProperties:Resources.Active_ToolWindows}" />
+                                                   Text="激活工具窗口" />
                                         <ListBox x:Name="PART_AnchorableListBox"
-                                                 AutomationProperties.Name="{x:Static avalonDockProperties:Resources.Active_ToolWindows}"
+                                                 AutomationProperties.Name="激活工具窗口"
                                                  Grid.Row="1" MaxHeight="400"
                                                  Background="Transparent" BorderThickness="0"
                                                  FocusVisualStyle="{x:Null}"
@@ -1120,9 +1119,9 @@
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
                                         <TextBlock Margin="0,3,0,4" FontWeight="Bold"
-                                                   Text="{x:Static avalonDockProperties:Resources.Active_Files}" />
+                                                   Text="激活文件" />
                                         <ListBox x:Name="PART_DocumentListBox"
-                                                 AutomationProperties.Name="{x:Static avalonDockProperties:Resources.Active_Files}"
+                                                 AutomationProperties.Name="激活文件"
                                                  Grid.Row="1" MaxHeight="400"
                                                  Background="Transparent" BorderThickness="0"
                                                  FocusVisualStyle="{x:Null}"

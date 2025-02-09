@@ -58,6 +58,22 @@ namespace RestSharpDemo
             lb.Items.Add("");
             lb.Items.Add("Get:");
             lb.Items.Add(json.ToString());
+			
+			
+			//JsonSerializerSettings setting = new JsonSerializerSettings()
+			//{   
+			//	PreserveReferencesHandling = PreserveReferencesHandling.None
+			//};
+			//string data = JsonConvert.SerializeObject(body, setting);
+			//var client = new RestClient(url);
+			//var request = new RestRequest()
+			//{
+			//	Method = Method.Post,
+			//	Timeout = 1000,
+			//};
+			//request.AddJsonBody(data);
+			//string result = client.Execute(request).Content;
+			//JObject jsonObject = JObject.Parse(result);
         }
     }
 }

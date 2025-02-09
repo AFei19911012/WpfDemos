@@ -1,4 +1,6 @@
 ﻿using Serilog;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 
 namespace SerilogDemo
@@ -13,7 +15,7 @@ namespace SerilogDemo
             InitializeComponent();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Warning()
                 .WriteTo.File("logs\\log.txt", outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}", rollingInterval: RollingInterval.Minute)
                 .CreateLogger();
         }
@@ -21,15 +23,35 @@ namespace SerilogDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             using var log = new LoggerConfiguration()
-                .WriteTo.File("logs\\test.txt", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Verbose()
+                .WriteTo.File("logs\\test.txt", rollingInterval: RollingInterval.Day,
+                                                fileSizeLimitBytes: 1024 * 1024 * 1024,
+                                                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
                 .CreateLogger();
             log.Information("Hello, Serilog!");
             log.Warning("Goodbye, Serilog.");
+            log.Error("Goodbye, Serilog.");
+            log.Debug("Goodbye, Serilog.");
 
+            log.Debug(GetMethod());
 
-            Log.Error("WoW");
+            log.Debug(GetCallerMethodName() + " 测试");
+        }
 
-            Log.CloseAndFlush();
+        private string GetCallerMethodName()
+        {
+            StackTrace stackTrace = new StackTrace();
+            StackFrame stackFrame = stackTrace.GetFrame(1);
+            if (stackFrame != null)
+            {
+                return stackFrame.GetMethod().Name;
+            }
+            return "NA";
+        }
+
+        private string GetMethod(string msg = "")
+        {
+            return $"{GetCallerMethodName()}: {msg}";
         }
     }
 }

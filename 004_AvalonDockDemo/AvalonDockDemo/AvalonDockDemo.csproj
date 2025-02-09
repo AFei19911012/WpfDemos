@@ -29,7 +29,7 @@
 	    <HintPath>..\..\..\Dlls\MLib.dll</HintPath>
 	  </Reference>
 	  <Reference Include="WffControls">
-	    <HintPath>..\..\..\WffControls\bin\WffControls.dll</HintPath>
+	    <HintPath>..\..\..\Dlls\WffControls.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

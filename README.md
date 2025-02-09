@@ -57,4 +57,12 @@ WPF 测试项目，第三方库使用案例
 54. NewLife.Net 远程调用协议RPC；
 55. FileSystemWatcher 监控文件；
 56. 使用 NewLife.Net 传输文件；
-57. 
+57. gong-wpf-dragdrop 集合类型内容拖放；
+58. 画三维曲面；
+59. 三维曲面图编辑；
+60. MvvmLight Messenger 事件交互；
+61. RepoDB 操作 Sqlite 数据库；
+62. CsvExport 写 csv 格式文件；
+63. VTK Wpf；
+64. 
+

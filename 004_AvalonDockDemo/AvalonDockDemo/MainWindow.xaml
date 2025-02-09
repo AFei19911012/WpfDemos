@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AvalonDockDemo"
-        xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
+        xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls" xmlns:themes="clr-namespace:AvalonDock.Themes;assembly=AvalonDock.Themes.VS2013"
         mc:Ignorable="d" Title="MainWindow"
         Height="450" Width="800">
     <Grid>
@@ -28,7 +28,7 @@
                             IsVirtualizingAnchorable="True"
                             IsVirtualizingDocument="True">
                 <DockingManager.Theme>
-                    <Vs2013LightTheme />
+                    <themes:Vs2013LightTheme />
                 </DockingManager.Theme>
                 <DockingManager.DocumentHeaderTemplate>
                     <DataTemplate>
@@ -53,7 +53,7 @@
                                     <wff:TextBox Grid.Row="1" Text="Document 1 Content" />
                                 </LayoutDocument>
                                 <LayoutDocument Title="Document 2" ContentId="document2">
-                                    <wff:TextBox Text="document2" Title="Content" />
+                                    <wff:TextBox Text="document2" wff:TitleElement.Title="Content" />
                                 </LayoutDocument>
                             </LayoutDocumentPane>
                         </LayoutDocumentPaneGroup>
@@ -63,7 +63,7 @@
                                 <LayoutAnchorable Title="Tool Window 1" ContentId="toolWindow1"
                                                   Hiding="OnToolWindow1Hiding">
                                     <StackPanel MinHeight="450">
-                                        <wff:TextBox Text="toolWindow1" Title="Content" />
+                                        <wff:TextBox Text="toolWindow1" wff:TitleElement.Title="Content" />
                                     </StackPanel>
                                 </LayoutAnchorable>
                                 <LayoutAnchorable Title="Tool Window 2" ContentId="toolWindow2">
@@ -78,14 +78,14 @@
                             <LayoutAnchorGroup>
                                 <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide1 Content"
                                                   ContentId="AutoHide1Content">
-                                    <wff:TextBox Text="AutoHide1Content" Title="Content" />
+                                    <wff:TextBox Text="AutoHide1Content" wff:TitleElement.Title="Content" />
                                 </LayoutAnchorable>
 
                                 <LayoutAnchorable AutoHideMinWidth="350" Title="AutoHide2 Content"
                                                   ContentId="AutoHide2Content">
                                     <StackPanel Orientation="Vertical">
-                                        <wff:TextBox Text="AutoHide2Content-1" Title="Content" />
-                                        <wff:TextBox Text="AutoHide2Content-2" Title="Content" />
+                                        <wff:TextBox Text="AutoHide2Content-1" wff:TitleElement.Title="Content" />
+                                        <wff:TextBox Text="AutoHide2Content-2" wff:TitleElement.Title="Content" />
                                     </StackPanel>
                                 </LayoutAnchorable>
                             </LayoutAnchorGroup>
