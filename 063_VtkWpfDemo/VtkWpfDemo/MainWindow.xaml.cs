@@ -1,4 +1,6 @@
 ﻿using Kitware.VTK;
+using Microsoft.DwayneNeed.Win32.User32;
+using System.Drawing.Imaging;
 using System.Windows;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -9,7 +11,6 @@ namespace VtkWpfDemo
     /// </summary>
     public partial class MainWindow : Window
     {
-        
         private vtkRenderWindow renWin;
         private vtkRenderer render;
         private vtkRenderWindowInteractor interactor;
@@ -17,6 +18,12 @@ namespace VtkWpfDemo
         private Data3DModel model;
         private vtkTexture texture;
         private vtkActor actor;
+        private vtkScalarBarActor colorbar;
+        private vtkCamera camera;
+
+        private int[] InitClickPos { get; set; }
+        private bool CanMove { get; set; }
+        private double[] CurWinCenter { get; set; }
 
 
         public MainWindow()
@@ -33,11 +40,16 @@ namespace VtkWpfDemo
 
             interactor = vtkRenderWindowInteractor.New();
             interactor.SetRenderWindow(renWin);
+            interactor.MiddleButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnMiddleButtonPressEvt);
             interactor.MouseMoveEvt += new vtkObject.vtkObjectEventHandler(OnMouseMoveEvt);
+
             style = vtkInteractorStyleTrackballCamera.New();
+            //style.MouseWheelBackwardEvt += new vtkObject.vtkObjectEventHandler(OnMouseWheelBackwardEvt);
+            //style.MouseWheelForwardEvt += new vtkObject.vtkObjectEventHandler(OnMouseWheelForwardEvt);
             style.RightButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnRightButtonPressEvt);
-            renWin.GetInteractor().SetInteractorStyle(style);
+            style.RightButtonReleaseEvt += new vtkObject.vtkObjectEventHandler(OnRightButtonReleaseEvt);
             interactor.SetInteractorStyle(style);
+
 
             vtkFileOutputWindow output = new vtkFileOutputWindow();
             output.SetFileName(@"log\vtk.log");
@@ -89,7 +101,7 @@ namespace VtkWpfDemo
             vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
             mapper.SetInputConnection(polyData.GetOutputPort());
 
-            vtkLODActor actor = vtkLODActor.New();
+            actor = vtkLODActor.New();
             actor.SetMapper(mapper);
 
             render.AddActor(actor);
@@ -100,20 +112,37 @@ namespace VtkWpfDemo
             render.SetBackground2(0.8, 0.8, 0.8);
             //renWin.SetSize(512, 512);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
+        }
+
+        private void OnMiddleButtonPressEvt(vtkObject sender, vtkObjectEventArgs e)
+        {
+            camera?.SetPosition(0, 0, 0);
+            camera?.SetFocalPoint(0, 0, -1);
+            camera?.SetViewUp(0, 1, 0);
+            camera?.SetWindowCenter(0, 0);
+            render?.ResetCamera();
+            renWin?.Render();
+        }
+
+        private void OnMouseWheelForwardEvt(vtkObject sender, vtkObjectEventArgs e)
+        {
+            camera.Zoom(1.25);
+            renWin.Render();
+        }
+        private void OnMouseWheelBackwardEvt(vtkObject sender, vtkObjectEventArgs e)
+        {
+            camera.Zoom(0.8);
+            renWin.Render();
         }
 
         private void OnRightButtonPressEvt(vtkObject sender, vtkObjectEventArgs e)
         {
-            vtkTransform trans = vtkTransform.New();
-            trans.RotateZ(-90);
-            trans.RotateY(180);
-            actor.SetUserTransform(trans);
-
-            render = vtkRenderer.New();
-            render.AddActor(actor);
-            render.SetBackground(0.1, 0.2, 0.4);
-            renWin.AddRenderer(render);
-            renWin.Render();
+            InitClickPos = renWin.GetInteractor().GetEventPosition();
+            CanMove = true;
+            CurWinCenter = camera.GetWindowCenter();
         }
 
         private void OnMouseMoveEvt(vtkObject sender, vtkObjectEventArgs e)
@@ -122,15 +151,29 @@ namespace VtkWpfDemo
             interactor.GetPicker().Pick(pos[0], pos[1], 0, render);
             // 世界坐标
             var posWorld = interactor.GetPicker().GetPickPosition();
+
+            if (CanMove == true)
+            {
+                var winSize = renWin.GetSize();
+                var dx = 1.0 * (pos[0] - InitClickPos[0]) / winSize[0];
+                var dy = 1.0 * (pos[1] - InitClickPos[1]) / winSize[1];
+                // [-1, 1]
+                camera.SetWindowCenter(CurWinCenter[0] - dx * 2, CurWinCenter[1] - dy * 2);
+                renWin.Render();
+            }
         }
 
+        private void OnRightButtonReleaseEvt(vtkObject sender, vtkObjectEventArgs e)
+        {
+            CanMove = false;
+        }
 
         private vtkScalarBarActor CreateColorbar(vtkLookupTable lut)
         {
             vtkScalarBarActor scalarBar = vtkScalarBarActor.New();
             scalarBar.SetLookupTable(lut);
             scalarBar.SetHeight(0.3);
-            scalarBar.SetWidth(0.1);
+            scalarBar.SetWidth(0.08);
             scalarBar.SetNumberOfLabels(5);
             scalarBar.SetPosition(0.9, 0.65);
             scalarBar.GetLabelTextProperty().SetFontSize(4);
@@ -141,21 +184,20 @@ namespace VtkWpfDemo
 
         private vtkLookupTable CreateLookupTable(double mini, double maxi, int number = 256)
         {
-            //vtkNamedColors colors = vtkNamedColors.New();
-            //vtkColorSeries colorSeries = vtkColorSeries.New();
-            //colorSeries.SetNumberOfColors(8);
-            //colorSeries.SetColorSchemeName("Hawaii");
-            //colorSeries.SetColor(0, colors.GetColor3ub("turquoise_blue"));
-            //colorSeries.SetColor(1, colors.GetColor3ub("sea_green_medium"));
-            //colorSeries.SetColor(2, colors.GetColor3ub("sap_green"));
-            //colorSeries.SetColor(3, colors.GetColor3ub("green_dark"));
-            //colorSeries.SetColor(4, colors.GetColor3ub("tan"));
-            //colorSeries.SetColor(5, colors.GetColor3ub("beige"));
-            //colorSeries.SetColor(6, colors.GetColor3ub("light_beige"));
-            //colorSeries.SetColor(7, colors.GetColor3ub("bisque"));
+            vtkNamedColors colors = vtkNamedColors.New();
+            vtkColorSeries colorSeries = vtkColorSeries.New();
+            colorSeries.SetNumberOfColors(8);
+            colorSeries.SetColorSchemeName("Hawaii");
+            colorSeries.SetColor(0, colors.GetColor3ub("turquoise_blue"));
+            colorSeries.SetColor(1, colors.GetColor3ub("sea_green_medium"));
+            colorSeries.SetColor(2, colors.GetColor3ub("sap_green"));
+            colorSeries.SetColor(3, colors.GetColor3ub("green_dark"));
+            colorSeries.SetColor(4, colors.GetColor3ub("tan"));
+            colorSeries.SetColor(5, colors.GetColor3ub("beige"));
+            colorSeries.SetColor(6, colors.GetColor3ub("light_beige"));
+            colorSeries.SetColor(7, colors.GetColor3ub("bisque"));
             vtkLookupTable lut = vtkLookupTable.New();
-            //colorSeries.BuildLookupTable(lut, 0);
-            lut.SetNanColor(1, 0, 0, 1);
+            colorSeries.BuildLookupTable(lut, 0);
 
             // 黑白效果
             //lut.SetHueRange(0, 0);
@@ -166,10 +208,10 @@ namespace VtkWpfDemo
             //lut.SetSaturationRange(1.0, 0);
             //lut.SetValueRange(0.5, 1.0);
 
-            //// 红到蓝
+            // 红到蓝
             //lut.SetHueRange(0.0, 0.667);
-            //// 蓝到红
-            ////lut.SetHueRange(0.667, 0.0);
+            // 蓝到红
+            lut.SetHueRange(0.667, 0.0);
 
             lut.SetNumberOfColors(number);
             lut.SetTableRange(mini, maxi);
@@ -198,22 +240,64 @@ namespace VtkWpfDemo
         {
             vtkPolyData polydata = vtkPolyData.New();
             polydata.SetPoints(points);
-            vtkVertexGlyphFilter glyph = vtkVertexGlyphFilter.New();
-            glyph.SetInputData(polydata);
-            glyph.Update();
+
+            //vtkVertexGlyphFilter glyph = vtkVertexGlyphFilter.New();
+            //glyph.SetInputData(polydata);
+            //glyph.Update();
+
+            // 下采样 无用
+            //vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
+            //shrink.SetInputData(glyph.GetOutput());
+            ////shrink.SetShrinkFactor(0.5);
+            //shrink.Update();
+
+            // 下采样 无用
+            //vtkDecimatePro decimate = vtkDecimatePro.New();
+            //decimate.SetInputData(glyph.GetOutput());
+            //decimate.SetTargetReduction(0.5);
+            //decimate.Update();
+
+            // 下采样 太慢
+            //vtkCleanPolyData clean = vtkCleanPolyData.New();
+            //clean.SetInputData(glyph.GetOutput());
+            //clean.SetTolerance(0.001);
+            //clean.Update();
+
+            // 下采样
+            vtkVoxelGrid voxel = vtkVoxelGrid.New();
+            voxel.SetConfigurationStyleToManual();
+            voxel.SetDivisions(200, 200, 1);
+            voxel.SetInputData(polydata);
+            //voxel.SetLeafSize(0.01, 0.01, 0.01);
+            //voxel.SetNumberOfPointsPerBin(1);
+            voxel.Update();
+
+            // 曲面重建（点数少适用）
+            //vtkSurfaceReconstructionFilter surf = vtkSurfaceReconstructionFilter.New();
+            //surf.SetInputData(voxel.GetOutput());
+            //surf.Update();
+            //vtkContourFilter cf = vtkContourFilter.New();
+            //cf.SetInputConnection(surf.GetOutputPort());
+            //cf.SetValue(0, 0.0);
+            //cf.Update();
+            //vtkReverseSense reverse = vtkReverseSense.New();
+            //reverse.SetInputConnection(cf.GetOutputPort());
+            //reverse.ReverseCellsOn();
+            //reverse.ReverseNormalsOn();
+            //reverse.Update();
+
+            // 三角网格(点数少适用，W/S切换显示)
+            vtkDelaunay2D delaunay = vtkDelaunay2D.New();
+            delaunay.SetInputData(voxel.GetOutput());
+            delaunay.Update();
 
             double[] minmax = points.GetBounds();
-
-            vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
-            shrink.SetInputConnection(glyph.GetOutputPort());
-            shrink.Update();
-
             vtkLookupTable lut = CreateLookupTable(minmax[4], minmax[5]);
-            vtkUnsignedCharArray colormap = CreateColormap(shrink.GetOutput().GetPoints(), lut);
-            shrink.GetOutput().GetPointData().SetScalars(colormap);
+            vtkUnsignedCharArray colormap = CreateColormap(voxel.GetOutput().GetPoints(), lut);
+            voxel.GetOutput().GetPointData().SetScalars(colormap);
 
             vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
-            glyphFilter.SetInputData(shrink.GetOutput());
+            glyphFilter.SetInputData(voxel.GetOutput());
             glyphFilter.Update();
 
             vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
@@ -224,7 +308,7 @@ namespace VtkWpfDemo
             {
                 mapper.ScalarVisibilityOff();
                 vtkTextureMapToPlane texturemap = vtkTextureMapToPlane.New();
-                texturemap.SetInputConnection(glyphFilter.GetOutputPort());
+                texturemap.SetInputConnection(delaunay.GetOutputPort());
                 mapper.SetInputConnection(texturemap.GetOutputPort());
             }
             else
@@ -239,16 +323,76 @@ namespace VtkWpfDemo
             {
                 actor.SetTexture(texture);
             }
-            vtkTransform trans = vtkTransform.New();
-            trans.RotateZ(-90);
-            trans.RotateY(180);
-            actor.SetUserTransform(trans);
+            //vtkTransform trans = vtkTransform.New();
+            //trans.RotateZ(-90);
+            //trans.RotateY(180);
+            //actor.SetUserTransform(trans);
+
+            vtkRenderer out_render = vtkRenderer.New();
+            out_render.AddActor(actor);
+            if (texture == null)
+            {
+                colorbar = CreateColorbar(lut);
+                out_render.AddActor(colorbar);
+            }
+            
+            out_render.SetBackground(0.1, 0.2, 0.4);
+
+            return out_render;
+        }
+
+        private vtkRenderer ShowImageData(Data3DModel model)
+        {
+            int w = model.Width;
+            int h = model.Height;
+            vtkImageData imageData = vtkImageData.New();
+            double[] minmax = model.Points.GetBounds();
+            double z = minmax[5] - minmax[4];
+            double y = minmax[3] - minmax[2];
+            double x = minmax[1] - minmax[0];
+            imageData.SetDimensions(w, h, 1);
+            imageData.SetSpacing(x / z, y / z, 1);
+            imageData.AllocateScalars(11, 1);
+            vtkDataArray scalars = imageData.GetPointData().GetScalars();
+            double scale = Math.Sqrt(w / x * w / x + h / y * h / y);
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    int index = i * h + j;
+                    var values = model.Points.GetPoint(index);
+                    scalars.SetTuple1(index, scale * values[2]);
+                }
+            }
+
+            // 降采样，数据量大了不行
+            vtkImageShrink3D shrink3D = vtkImageShrink3D.New();
+            shrink3D.SetInputData(imageData);
+            shrink3D.SetShrinkFactors(4, 4, 1);
+            shrink3D.Update();
+
+            vtkGreedyTerrainDecimation decimation = vtkGreedyTerrainDecimation.New();
+            decimation.SetInputData(shrink3D.GetOutput());
+            decimation.Update();
+
+            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+            mapper.SetInputData(decimation.GetOutput());
+            mapper.SetScalarRange(scale * model.MinZ, scale * model.MaxZ);
+            vtkActor actor = vtkActor.New();
+            actor.SetMapper(mapper);
+            actor.GetProperty().SetInterpolationToFlat();
+            //actor.GetProperty().EdgeVisibilityOn();
+            //actor.GetProperty().SetEdgeColor(1, 0, 0);
+
+            vtkLookupTable lut = CreateLookupTable(minmax[4], minmax[5]);
 
             vtkRenderer out_render = vtkRenderer.New();
             out_render.AddActor(actor);
             out_render.AddActor(CreateColorbar(lut));
-            out_render.SetBackground(0.1, 0.2, 0.4);
-
+            out_render.SetViewport(0, 0, 1.0, 1.0);
+            out_render.GradientBackgroundOn();
+            out_render.SetBackground(0.1, 0.2, 0.3);
+            out_render.SetBackground2(0.8, 0.8, 0.8);
             return out_render;
         }
 
@@ -263,49 +407,13 @@ namespace VtkWpfDemo
             if (dlg.ShowDialog() == true)
             {
                 model = DataIoHelper.ReadDlt(dlg.FileName);
+                renWin.RemoveRenderer(render);
                 render = ShowPointCloud(model.Points);
                 renWin.AddRenderer(render);
                 renWin.Render();
-            }
-        }
 
-        private void LoadStlFile_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Title = "选择3D图文件",
-                Filter = "3D图文件|*.stl",
-                InitialDirectory = Environment.CurrentDirectory,
-            };
-            if (dlg.ShowDialog() == true)
-            {
-                vtkSTLReader stl = vtkSTLReader.New();
-                stl.SetFileName(dlg.FileName);
-
-                // 数据压缩
-                vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
-                shrink.SetInputConnection(stl.GetOutputPort());
-                shrink.SetShrinkFactor(0.5);
-
-                vtkElevationFilter colorIt = vtkElevationFilter.New();
-                colorIt.SetInputConnection(shrink.GetOutputPort());
-                colorIt.SetLowPoint(0, 0, -1);
-                colorIt.SetHighPoint(0, 0, 1);
-
-                vtkLookupTable lut = CreateLookupTable(-1, 1);
-                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
-                mapper.SetInputConnection(colorIt.GetOutputPort());
-
-                vtkLODActor actor = vtkLODActor.New();
-                actor.SetMapper(mapper);
-
-                render = vtkRenderer.New();
-                render.AddActor(actor);
-                render.AddActor(CreateColorbar(lut));
-                render.SetBackground(0.1, 0.2, 0.4);
-                render.ResetCamera();
-                renWin.AddRenderer(render);
-                renWin.Render();
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -343,22 +451,99 @@ namespace VtkWpfDemo
                 vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
                 mapper.SetInputConnection(plane.GetOutputPort());
 
-                vtkActor actor = vtkActor.New();
+                actor = vtkActor.New();
                 actor.SetMapper(mapper);
                 actor.SetTexture(texture);
 
+                renWin.RemoveRenderer(render);
                 render = vtkRenderer.New();
                 render.AddActor(actor);
                 render.SetBackground(0.2, 0.3, 0.3);
                 render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
 
-                vtkCamera camera = vtkCamera.New();
-                camera.SetPosition(0, 0, 2);
-                camera.SetFocalPoint(0, 0, 0);
-                camera.Azimuth(0);
-                camera.Elevation(0);
-                render.SetActiveCamera(camera);
+        private void VtkShrinkPolyData_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
 
+                // 数据压缩
+                vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
+                shrink.SetInputConnection(stl.GetOutputPort());
+                shrink.SetShrinkFactor(0.7);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(shrink.GetOutputPort());
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
+
+        private void VtkElevationFilter_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
+                stl.Update();
+
+                var bounds = stl.GetOutput().GetBounds();
+
+                // 加这个就显示点云
+                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
+                glyphFilter.SetInputData(stl.GetOutput());
+                glyphFilter.Update();
+
+                vtkElevationFilter colorIt = vtkElevationFilter.New();
+                colorIt.SetInputConnection(stl.GetOutputPort());
+                colorIt.SetLowPoint(0, 0, bounds[4]);
+                colorIt.SetHighPoint(0, 0, bounds[5]);
+
+                vtkColorTransferFunction colorFun = vtkColorTransferFunction.New();
+                // 蓝 → 红 → 绿
+                colorFun.AddRGBPoint(0.0, 0, 0, 1);
+                colorFun.AddRGBPoint(0.5, 1, 0, 0);
+                colorFun.AddRGBPoint(1.0, 0, 1, 0);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(colorIt.GetOutputPort());
+                mapper.SetLookupTable(colorFun);
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.GetProperty().SetPointSize(2f);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
             }

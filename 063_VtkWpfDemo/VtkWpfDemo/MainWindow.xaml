@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VtkWpfDemo" xmlns:vtk="clr-namespace:Kitware.VTK" xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
+        xmlns:local="clr-namespace:VtkWpfDemo"
+        xmlns:vtk="clr-namespace:Kitware.VTK"
+        xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="450"
@@ -18,9 +20,18 @@
         </WindowsFormsHost>
 
         <WrapPanel Grid.Row="1">
-            <wff:Button Content="读取文件" Click="LoadFile_Click" Margin="5" />
-            <wff:Button Content="读取stl文件" Click="LoadStlFile_Click" Margin="5" />
-            <wff:Button Content="图片纹理" Click="TextureMap_Click" Margin="5" />
+            <wff:Button Content="vtkShrinkPolyData 压缩数据"
+                        Click="VtkShrinkPolyData_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkElevationFilter 颜色映射"
+                        Click="VtkElevationFilter_Click"
+                        Margin="5" />
+            <wff:Button Content="读取文件"
+                        Click="LoadFile_Click"
+                        Margin="5" />
+            <wff:Button Content="图片纹理"
+                        Click="TextureMap_Click"
+                        Margin="5" />
         </WrapPanel>
     </Grid>
 </Window>
