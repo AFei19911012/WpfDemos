@@ -38,6 +38,12 @@
             <wff:Button Content="vtkSurfaceReconstructionFilter 曲面重建"
                         Click="VtkSurfaceReconstructionFilter_Click"
                         Margin="5" />
+            <wff:Button Content="vtkDelaunay2D 表面重建"
+                        Click="VtkDelaunay2D_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkSmoothPolyDataFilter 平滑表面"
+                        Click="VtkSmoothPolyDataFilter_Click"
+                        Margin="5" />
             <wff:Button Content="读取文件"
                         Click="LoadFile_Click"
                         Margin="5" />

@@ -665,56 +665,157 @@ namespace VtkWpfDemo
 
         private void VtkSurfaceReconstructionFilter_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog
+            vtkPoints points = vtkPoints.New();
+            for (int i = 0; i < 20; i++)
             {
-                Title = "选择3D图文件",
-                Filter = "3D图文件|*.stl",
-                InitialDirectory = Environment.CurrentDirectory,
-            };
-            if (dlg.ShowDialog() == true)
-            {
-                vtkSTLReader stl = vtkSTLReader.New();
-                stl.SetFileName(dlg.FileName);
-                stl.Update();
-
-                var count = stl.GetOutput().GetNumberOfPoints();
-
-                // 曲面重建
-                vtkSurfaceReconstructionFilter surf = vtkSurfaceReconstructionFilter.New();
-                surf.SetInputData(stl.GetOutput());
-                surf.Update();
-                vtkContourFilter cf = vtkContourFilter.New();
-                cf.SetInputConnection(surf.GetOutputPort());
-                cf.SetValue(0, 0.0);
-                cf.Update();
-                vtkReverseSense reverse = vtkReverseSense.New();
-                reverse.SetInputConnection(cf.GetOutputPort());
-                reverse.ReverseCellsOn();
-                reverse.ReverseNormalsOn();
-                reverse.Update();
-
-                var bounds = stl.GetOutput().GetBounds();
-
-                vtkElevationFilter colorIt = vtkElevationFilter.New();
-                colorIt.SetInputData(reverse.GetOutput());
-                colorIt.SetLowPoint(0, 0, bounds[4]);
-                colorIt.SetHighPoint(0, 0, bounds[5]);
-
-                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
-                mapper.SetInputConnection(colorIt.GetOutputPort());
-
-                vtkActor actor = vtkActor.New();
-                actor.SetMapper(mapper);
-                actor.GetProperty().SetPointSize(2f);
-
-                renWin.RemoveRenderer(render);
-                render = vtkRenderer.New();
-                render.AddActor(actor);
-                render.SetBackground(0.1, 0.2, 0.4);
-                render.ResetCamera();
-                renWin.AddRenderer(render);
-                renWin.Render();
+                for (int j = 0; j < 20; j++)
+                {
+                    double x = 0.1 * i;
+                    double y = 0.1 * j;
+                    points.InsertNextPoint(i, j, Math.Exp((x - 1) * (x - 1) + (y - 1) * (y - 1)));
+                }
             }
+
+            vtkPolyData polyData = vtkPolyData.New();
+            polyData.SetPoints(points);
+
+            // 曲面重建
+            vtkSurfaceReconstructionFilter surf = vtkSurfaceReconstructionFilter.New();
+            surf.SetInputData(polyData);
+            surf.Update();
+            vtkContourFilter cf = vtkContourFilter.New();
+            cf.SetInputConnection(surf.GetOutputPort());
+            cf.SetValue(0, 0.0);
+            cf.Update();
+            vtkReverseSense reverse = vtkReverseSense.New();
+            reverse.SetInputConnection(cf.GetOutputPort());
+            reverse.ReverseCellsOn();
+            reverse.ReverseNormalsOn();
+            reverse.Update();
+
+            var bounds = polyData.GetBounds();
+
+            vtkElevationFilter colorIt = vtkElevationFilter.New();
+            colorIt.SetInputData(reverse.GetOutput());
+            colorIt.SetLowPoint(0, 0, bounds[4]);
+            colorIt.SetHighPoint(0, 0, bounds[5]);
+
+            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+            mapper.SetInputConnection(colorIt.GetOutputPort());
+
+            vtkActor actor = vtkActor.New();
+            actor.SetMapper(mapper);
+            actor.GetProperty().SetPointSize(2f);
+
+            renWin.RemoveRenderer(render);
+            render = vtkRenderer.New();
+            render.AddActor(actor);
+            render.SetBackground(0.1, 0.2, 0.4);
+            render.ResetCamera();
+            renWin.AddRenderer(render);
+            renWin.Render();
+        }
+
+        private void VtkDelaunay2D_Click(object sender, RoutedEventArgs e)
+        {
+            vtkPoints points = vtkPoints.New();
+            for (int i = 0; i < 20; i++)
+            {
+                for (int j = 0; j < 20; j++)
+                {
+                    double x = 0.1 * i;
+                    double y = 0.1 * j;
+                    points.InsertNextPoint(i, j, Math.Exp((x - 1) * (x - 1) + (y - 1) * (y - 1)));
+                }
+            }
+
+            vtkPolyData polyData = vtkPolyData.New();
+            polyData.SetPoints(points);
+
+            var count = polyData.GetNumberOfPoints();
+
+            // 表面重建 三角剖分
+            vtkDelaunay2D delaunay = vtkDelaunay2D.New();
+            delaunay.SetInputData(polyData);
+            delaunay.Update();
+
+            var bounds = polyData.GetBounds();
+
+            vtkElevationFilter colorIt = vtkElevationFilter.New();
+            colorIt.SetInputData(delaunay.GetOutput());
+            colorIt.SetLowPoint(0, 0, bounds[4]);
+            colorIt.SetHighPoint(0, 0, bounds[5]);
+
+            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+            mapper.SetInputConnection(colorIt.GetOutputPort());
+
+            vtkActor actor = vtkActor.New();
+            actor.SetMapper(mapper);
+            actor.GetProperty().SetPointSize(2f);
+
+            renWin.RemoveRenderer(render);
+            render = vtkRenderer.New();
+            render.AddActor(actor);
+            render.SetBackground(0.1, 0.2, 0.4);
+            render.ResetCamera();
+            renWin.AddRenderer(render);
+            renWin.Render();
+        }
+
+        private void VtkSmoothPolyDataFilter_Click(object sender, RoutedEventArgs e)
+        {
+            vtkMinimalStandardRandomSequence rand = vtkMinimalStandardRandomSequence.New();
+            rand.SetSeed(8775070);
+            vtkPoints points = vtkPoints.New();
+            for (int i = -20; i < 20; i++)
+            {
+                for (int j = -20; j < 20; j++)
+                {
+                    double z = rand.GetRangeValue(-1, 1) + 0.05 * i * i + 0.05 * j * j;
+                    rand.Next();
+                    points.InsertNextPoint(i, j, z);
+                }
+            }
+
+            vtkPolyData polyData = vtkPolyData.New();
+            polyData.SetPoints(points);
+
+            var count = polyData.GetNumberOfPoints();
+
+            // 表面重建 三角剖分
+            vtkDelaunay2D delaunay = vtkDelaunay2D.New();
+            delaunay.SetInputData(polyData);
+            delaunay.Update();
+
+            vtkSmoothPolyDataFilter smooth = vtkSmoothPolyDataFilter.New();
+            smooth.SetInputData(delaunay.GetOutput());
+            smooth.SetNumberOfIterations(15);
+            smooth.SetRelaxationFactor(0.1);
+            smooth.FeatureEdgeSmoothingOff();
+            smooth.BoundarySmoothingOn();
+            smooth.Update();
+
+            var bounds = polyData.GetBounds();
+
+            vtkElevationFilter colorIt = vtkElevationFilter.New();
+            colorIt.SetInputData(smooth.GetOutput());
+            colorIt.SetLowPoint(0, 0, bounds[4]);
+            colorIt.SetHighPoint(0, 0, bounds[5]);
+
+            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+            mapper.SetInputConnection(colorIt.GetOutputPort());
+
+            vtkActor actor = vtkActor.New();
+            actor.SetMapper(mapper);
+            actor.GetProperty().SetPointSize(2f);
+
+            renWin.RemoveRenderer(render);
+            render = vtkRenderer.New();
+            render.AddActor(actor);
+            render.SetBackground(0.1, 0.2, 0.4);
+            render.ResetCamera();
+            renWin.AddRenderer(render);
+            renWin.Render();
         }
     }
 }
