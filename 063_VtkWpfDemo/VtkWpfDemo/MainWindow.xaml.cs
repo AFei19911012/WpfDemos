@@ -1,6 +1,4 @@
 ﻿using Kitware.VTK;
-using Microsoft.DwayneNeed.Win32.User32;
-using System.Drawing.Imaging;
 using System.Windows;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -245,46 +243,12 @@ namespace VtkWpfDemo
             //glyph.SetInputData(polydata);
             //glyph.Update();
 
-            // 下采样 无用
-            //vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
-            //shrink.SetInputData(glyph.GetOutput());
-            ////shrink.SetShrinkFactor(0.5);
-            //shrink.Update();
-
-            // 下采样 无用
-            //vtkDecimatePro decimate = vtkDecimatePro.New();
-            //decimate.SetInputData(glyph.GetOutput());
-            //decimate.SetTargetReduction(0.5);
-            //decimate.Update();
-
-            // 下采样 太慢
-            //vtkCleanPolyData clean = vtkCleanPolyData.New();
-            //clean.SetInputData(glyph.GetOutput());
-            //clean.SetTolerance(0.001);
-            //clean.Update();
-
             // 下采样
             vtkVoxelGrid voxel = vtkVoxelGrid.New();
             voxel.SetConfigurationStyleToManual();
             voxel.SetDivisions(200, 200, 1);
             voxel.SetInputData(polydata);
-            //voxel.SetLeafSize(0.01, 0.01, 0.01);
-            //voxel.SetNumberOfPointsPerBin(1);
             voxel.Update();
-
-            // 曲面重建（点数少适用）
-            //vtkSurfaceReconstructionFilter surf = vtkSurfaceReconstructionFilter.New();
-            //surf.SetInputData(voxel.GetOutput());
-            //surf.Update();
-            //vtkContourFilter cf = vtkContourFilter.New();
-            //cf.SetInputConnection(surf.GetOutputPort());
-            //cf.SetValue(0, 0.0);
-            //cf.Update();
-            //vtkReverseSense reverse = vtkReverseSense.New();
-            //reverse.SetInputConnection(cf.GetOutputPort());
-            //reverse.ReverseCellsOn();
-            //reverse.ReverseNormalsOn();
-            //reverse.Update();
 
             // 三角网格(点数少适用，W/S切换显示)
             vtkDelaunay2D delaunay = vtkDelaunay2D.New();
@@ -478,7 +442,7 @@ namespace VtkWpfDemo
                 vtkSTLReader stl = vtkSTLReader.New();
                 stl.SetFileName(dlg.FileName);
 
-                // 数据压缩
+                // 下采样
                 vtkShrinkPolyData shrink = vtkShrinkPolyData.New();
                 shrink.SetInputConnection(stl.GetOutputPort());
                 shrink.SetShrinkFactor(0.7);
@@ -534,6 +498,210 @@ namespace VtkWpfDemo
                 vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
                 mapper.SetInputConnection(colorIt.GetOutputPort());
                 mapper.SetLookupTable(colorFun);
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.GetProperty().SetPointSize(2f);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
+
+        private void VtkDecimatePro_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
+                stl.Update();
+
+                // 下采样
+                vtkDecimatePro decimate = vtkDecimatePro.New();
+                decimate.SetInputData(stl.GetOutput());
+                decimate.SetTargetReduction(0.5);
+                decimate.Update();
+
+                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
+                glyphFilter.SetInputData(decimate.GetOutput());
+                glyphFilter.Update();
+
+                var bounds = stl.GetOutput().GetBounds();
+
+                vtkElevationFilter colorIt = vtkElevationFilter.New();
+                colorIt.SetInputData(glyphFilter.GetOutput());
+                colorIt.SetLowPoint(0, 0, bounds[4]);
+                colorIt.SetHighPoint(0, 0, bounds[5]);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(colorIt.GetOutputPort());
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.GetProperty().SetPointSize(2f);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
+
+        private void VtkCleanPolyData_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
+                stl.Update();
+
+                // 下采样
+                vtkCleanPolyData clean = vtkCleanPolyData.New();
+                clean.SetInputData(stl.GetOutput());
+                clean.SetTolerance(0.01);
+                clean.Update();
+
+                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
+                glyphFilter.SetInputData(clean.GetOutput());
+                glyphFilter.Update();
+
+                var bounds = stl.GetOutput().GetBounds();
+
+                vtkElevationFilter colorIt = vtkElevationFilter.New();
+                colorIt.SetInputData(glyphFilter.GetOutput());
+                colorIt.SetLowPoint(0, 0, bounds[4]);
+                colorIt.SetHighPoint(0, 0, bounds[5]);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(colorIt.GetOutputPort());
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.GetProperty().SetPointSize(2f);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
+
+        private void VtkVoxelGrid_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
+                stl.Update();
+
+                var count = stl.GetOutput().GetNumberOfPoints();
+
+                // 下采样
+                vtkVoxelGrid voxel = vtkVoxelGrid.New();
+                voxel.SetConfigurationStyleToManual();
+                voxel.SetDivisions(40, 40, 1);
+                voxel.SetInputData(stl.GetOutput());
+                // 以下两种是其他模式
+                //voxel.SetLeafSize(0.01, 0.01, 0.01);
+                //voxel.SetNumberOfPointsPerBin(1);
+                voxel.Update();
+
+                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
+                glyphFilter.SetInputData(voxel.GetOutput());
+                glyphFilter.Update();
+
+                var bounds = stl.GetOutput().GetBounds();
+
+                vtkElevationFilter colorIt = vtkElevationFilter.New();
+                colorIt.SetInputData(glyphFilter.GetOutput());
+                colorIt.SetLowPoint(0, 0, bounds[4]);
+                colorIt.SetHighPoint(0, 0, bounds[5]);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(colorIt.GetOutputPort());
+
+                vtkActor actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.GetProperty().SetPointSize(2f);
+
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+            }
+        }
+
+        private void VtkSurfaceReconstructionFilter_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择3D图文件",
+                Filter = "3D图文件|*.stl",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                vtkSTLReader stl = vtkSTLReader.New();
+                stl.SetFileName(dlg.FileName);
+                stl.Update();
+
+                var count = stl.GetOutput().GetNumberOfPoints();
+
+                // 曲面重建
+                vtkSurfaceReconstructionFilter surf = vtkSurfaceReconstructionFilter.New();
+                surf.SetInputData(stl.GetOutput());
+                surf.Update();
+                vtkContourFilter cf = vtkContourFilter.New();
+                cf.SetInputConnection(surf.GetOutputPort());
+                cf.SetValue(0, 0.0);
+                cf.Update();
+                vtkReverseSense reverse = vtkReverseSense.New();
+                reverse.SetInputConnection(cf.GetOutputPort());
+                reverse.ReverseCellsOn();
+                reverse.ReverseNormalsOn();
+                reverse.Update();
+
+                var bounds = stl.GetOutput().GetBounds();
+
+                vtkElevationFilter colorIt = vtkElevationFilter.New();
+                colorIt.SetInputData(reverse.GetOutput());
+                colorIt.SetLowPoint(0, 0, bounds[4]);
+                colorIt.SetHighPoint(0, 0, bounds[5]);
+
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.SetInputConnection(colorIt.GetOutputPort());
 
                 vtkActor actor = vtkActor.New();
                 actor.SetMapper(mapper);

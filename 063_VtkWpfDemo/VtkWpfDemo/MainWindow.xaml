@@ -8,7 +8,7 @@
         xmlns:wff="clr-namespace:WffControls.Controls;assembly=WffControls"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="450"
+        Height="650"
         Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,11 +20,23 @@
         </WindowsFormsHost>
 
         <WrapPanel Grid.Row="1">
-            <wff:Button Content="vtkShrinkPolyData 压缩数据"
+            <wff:Button Content="vtkShrinkPolyData 下采样"
                         Click="VtkShrinkPolyData_Click"
                         Margin="5" />
             <wff:Button Content="vtkElevationFilter 颜色映射"
                         Click="VtkElevationFilter_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkDecimatePro 下采样"
+                        Click="VtkDecimatePro_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkCleanPolyData 下采样"
+                        Click="VtkCleanPolyData_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkVoxelGrid 下采样"
+                        Click="VtkVoxelGrid_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkSurfaceReconstructionFilter 曲面重建"
+                        Click="VtkSurfaceReconstructionFilter_Click"
                         Margin="5" />
             <wff:Button Content="读取文件"
                         Click="LoadFile_Click"
