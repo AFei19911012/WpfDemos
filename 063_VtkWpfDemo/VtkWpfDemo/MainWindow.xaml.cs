@@ -20,6 +20,7 @@ namespace VtkWpfDemo
         private int[] InitClickPos { get; set; }
         private bool CanMove { get; set; }
         private double[] CurWinCenter { get; set; }
+        private DateTime PreClickTime { get; set; } = DateTime.Now;
 
 
         public MainWindow()
@@ -36,12 +37,14 @@ namespace VtkWpfDemo
 
             interactor = vtkRenderWindowInteractor.New();
             interactor.SetRenderWindow(renWin);
-            interactor.MiddleButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnMiddleButtonPressEvt);
+            //interactor.MiddleButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnMiddleButtonPressEvt);
             interactor.MouseMoveEvt += new vtkObject.vtkObjectEventHandler(OnMouseMoveEvt);
+            interactor.LeftButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnLeftButtonPressEvt);
 
             style = vtkInteractorStyleTrackballCamera.New();
             //style.MouseWheelBackwardEvt += new vtkObject.vtkObjectEventHandler(OnMouseWheelBackwardEvt);
             //style.MouseWheelForwardEvt += new vtkObject.vtkObjectEventHandler(OnMouseWheelForwardEvt);
+            style.MiddleButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnMiddleButtonPressEvt);
             style.RightButtonPressEvt += new vtkObject.vtkObjectEventHandler(OnRightButtonPressEvt);
             style.RightButtonReleaseEvt += new vtkObject.vtkObjectEventHandler(OnRightButtonReleaseEvt);
             interactor.SetInteractorStyle(style);
@@ -112,14 +115,28 @@ namespace VtkWpfDemo
             camera = render.GetActiveCamera();
         }
 
+        private void OnLeftButtonPressEvt(vtkObject sender, vtkObjectEventArgs e)
+        {
+            // 模拟下双击事件 两次点击间隔时间
+            // 重置视图相机
+            if ((DateTime.Now - PreClickTime).TotalMilliseconds < 300)
+            {
+                camera?.SetPosition(0, 0, 0);
+                camera?.SetFocalPoint(0, 0, -1);
+                camera?.SetViewUp(0, 1, 0);
+                camera?.SetWindowCenter(0, 0);
+                render?.ResetCamera();
+                renWin?.Render();
+            }
+
+            // 更新上次点击时间
+            PreClickTime = DateTime.Now;
+        }
+
         private void OnMiddleButtonPressEvt(vtkObject sender, vtkObjectEventArgs e)
         {
-            camera?.SetPosition(0, 0, 0);
-            camera?.SetFocalPoint(0, 0, -1);
-            camera?.SetViewUp(0, 1, 0);
-            camera?.SetWindowCenter(0, 0);
-            render?.ResetCamera();
-            renWin?.Render();
+            // 禁掉鼠标中键
+            return;
         }
 
         private void OnMouseWheelForwardEvt(vtkObject sender, vtkObjectEventArgs e)
@@ -320,6 +337,9 @@ namespace VtkWpfDemo
                 render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -376,6 +396,9 @@ namespace VtkWpfDemo
                 render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -426,6 +449,9 @@ namespace VtkWpfDemo
                 render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -486,6 +512,9 @@ namespace VtkWpfDemo
                 render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -546,6 +575,9 @@ namespace VtkWpfDemo
                 render.ResetCamera();
                 renWin.AddRenderer(render);
                 renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
             }
         }
 
@@ -592,6 +624,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkPoissonDiskSampler_Click(object sender, RoutedEventArgs e)
@@ -634,6 +669,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkDelaunay2D_Click(object sender, RoutedEventArgs e)
@@ -675,6 +713,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkSurfaceReconstructionFilter_Click(object sender, RoutedEventArgs e)
@@ -740,6 +781,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkSmoothPolyDataFilter_Click(object sender, RoutedEventArgs e)
@@ -805,6 +849,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkExtractSurface_Click(object sender, RoutedEventArgs e)
@@ -867,6 +914,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
 
         private void VtkImageData_Click(object sender, RoutedEventArgs e)
@@ -885,11 +935,11 @@ namespace VtkWpfDemo
             double x = bounds[1] - bounds[0];
             imageData.SetDimensions(w, h, 1);
             // 最后显示的图像xyz方向比例要合适
-            imageData.SetSpacing(x / z, y / z, 1);
+            imageData.SetSpacing(x, y, 1);
             imageData.AllocateScalars(11, 1);
             vtkDataArray scalars = imageData.GetPointData().GetScalars();
             // 这个参数也很重要，可以表征高度，值越大越高，可以认为xy方向步长为1
-            double scale = 500;
+            double scale = 2000;
             int index = 0;
             for (int i = 0; i < w; i++)
             {
@@ -921,8 +971,6 @@ namespace VtkWpfDemo
             vtkActor actor = vtkActor.New();
             actor.SetMapper(mapper);
             actor.GetProperty().SetInterpolationToFlat();
-            //actor.GetProperty().EdgeVisibilityOn();
-            //actor.GetProperty().SetEdgeColor(1, 0, 0);
             renWin.RemoveRenderer(render);
             render = vtkRenderer.New();
             render.AddActor(actor);
@@ -930,6 +978,9 @@ namespace VtkWpfDemo
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
         }
     }
 }
