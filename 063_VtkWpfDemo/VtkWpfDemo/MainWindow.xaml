@@ -10,16 +10,27 @@
         Title="MainWindow"
         Height="650"
         Width="800">
+    <Window.DataContext>
+        <local:MainVM />
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <WindowsFormsHost Margin="5">
             <vtk:RenderWindowControl x:Name="vtk_render" />
         </WindowsFormsHost>
 
-        <WrapPanel Grid.Row="1">
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal">
+            <TextBlock Text="当前点坐标："
+                       Margin="5,5,0,5" />
+            <TextBlock Text="{Binding StrPosition}"
+                       Margin="0,5" />
+        </StackPanel>
+        <WrapPanel Grid.Row="2">
             <wff:Button Content="vtkShrinkPolyData 下采样"
                         Click="VtkShrinkPolyData_Click"
                         Margin="5" />
@@ -55,6 +66,9 @@
                         Margin="5" />
             <wff:Button Content="vtkImageData 显示图像数据"
                         Click="VtkImageData_Click"
+                        Margin="5" />
+            <wff:Button Content="vtkLookupTable 显示Colorbar"
+                        Click="VtkLookupTable_Click"
                         Margin="5" />
         </WrapPanel>
     </Grid>
