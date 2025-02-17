@@ -70,6 +70,9 @@
             <wff:Button Content="vtkLookupTable 显示Colorbar"
                         Click="VtkLookupTable_Click"
                         Margin="5" />
+            <wff:Button Content="vtkUnsignedCharArray 点上色"
+                        Click="VtkUnsignedCharArray_Click"
+                        Margin="5" />
         </WrapPanel>
     </Grid>
 </Window>
