@@ -73,6 +73,9 @@
             <wff:Button Content="vtkUnsignedCharArray 点上色"
                         Click="VtkUnsignedCharArray_Click"
                         Margin="5" />
+            <wff:Button Content="非数NaN"
+                        Click="NaN_Click"
+                        Margin="5" />
         </WrapPanel>
     </Grid>
 </Window>

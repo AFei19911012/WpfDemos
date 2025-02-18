@@ -1,5 +1,4 @@
 ﻿using Kitware.VTK;
-using Microsoft.DwayneNeed.Win32.User32;
 using System.Windows;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -1081,6 +1080,63 @@ namespace VtkWpfDemo
             render.AddActor(actor);
             render.SetBackground(0.1, 0.2, 0.4);
             render.SetUseDepthPeeling(1);
+            render.ResetCamera();
+            renWin.AddRenderer(render);
+            renWin.Render();
+
+            // 相机
+            camera = render.GetActiveCamera();
+        }
+
+        private void NaN_Click(object sender, RoutedEventArgs e)
+        {
+            vtkXMLPolyDataReader reader = vtkXMLPolyDataReader.New();
+            reader.SetFileName(@"Files\laser.vtp");
+            reader.Update();
+
+            // 下采样
+            vtkPoissonDiskSampler poisson = vtkPoissonDiskSampler.New();
+            poisson.SetInputData(reader.GetOutput());
+            // 设置最小点间距，值越大点越少
+            poisson.SetRadius(0.3);
+            poisson.Update();
+
+            vtkPoints points = poisson.GetOutput().GetPoints();
+            int count = (int)points.GetNumberOfPoints();
+            for (int i = 0; i < count; i++)
+            {
+                var value = points.GetPoint(i);
+                if (value[2] > 5)
+                {
+                    points.SetPoint(i, value[0], value[1], double.NaN);
+                }
+            }
+            vtkPolyData polyData = vtkPolyData.New();
+            polyData.SetPoints(points);
+
+            // 表面重建 三角剖分
+            vtkDelaunay2D delaunay = vtkDelaunay2D.New();
+            delaunay.SetInputData(poisson.GetOutput());
+            delaunay.Update();
+
+            var bounds = poisson.GetOutput().GetBounds();
+
+            vtkElevationFilter colorIt = vtkElevationFilter.New();
+            colorIt.SetInputData(delaunay.GetOutput());
+            colorIt.SetLowPoint(0, 0, bounds[4]);
+            colorIt.SetHighPoint(0, 0, bounds[5]);
+
+            vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+            mapper.SetInputConnection(colorIt.GetOutputPort());
+
+            vtkActor actor = vtkActor.New();
+            actor.SetMapper(mapper);
+            actor.GetProperty().SetPointSize(2f);
+
+            renWin.RemoveRenderer(render);
+            render = vtkRenderer.New();
+            render.AddActor(actor);
+            render.SetBackground(0.1, 0.2, 0.4);
             render.ResetCamera();
             renWin.AddRenderer(render);
             renWin.Render();
