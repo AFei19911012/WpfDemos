@@ -198,101 +198,6 @@ namespace VtkWpfDemo
             CanMove = false;
         }
 
-        private void TextureMap_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Title = "选择图片文件",
-                Filter = "图片文件|*.jpg;*.bmp;*.png",
-                InitialDirectory = Environment.CurrentDirectory,
-            };
-            if (dlg.ShowDialog() == true)
-            {
-                //vtkJPEGReader jpg = vtkJPEGReader.New();
-                //jpg.SetFileName(dlg.FileName);
-                //jpg.Update();
-                vtkImageReader2 reader = vtkImageReader2Factory.CreateImageReader2(dlg.FileName);
-                reader.SetFileName(dlg.FileName);
-                reader.Update();
-
-                //vtkImageFlip flipX = vtkImageFlip.New();
-                //flipX.SetInputConnection(reader.GetOutputPort());
-                //flipX.SetFilteredAxes(0);
-                //flipX.Update();
-
-                //vtkImageFlip flipXY = vtkImageFlip.New();
-                //flipXY.SetInputConnection(flipX.GetOutputPort());
-                //flipXY.SetFilteredAxes(2);
-                //flipXY.Update();
-
-                var dim = reader.GetOutput().GetDimensions();
-                if (dim[0] > dim[1])
-                {
-                    texture = vtkTexture.New();
-                    texture.SetInputConnection(reader.GetOutputPort());
-                    texture.InterpolateOn();
-                    texture.Update();
-                }
-                else
-                {
-                    vtkImageReslice reslice = vtkImageReslice.New();
-                    reslice.SetInputConnection(reader.GetOutputPort());
-                    reslice.SetResliceAxesDirectionCosines(0, 1, 0, -1, 0, 0, 0, 0, 1);  // 旋转矩阵
-                    reslice.Update();
-
-                    texture = vtkTexture.New();
-                    texture.SetInputConnection(reslice.GetOutputPort());
-                    texture.InterpolateOn();
-                    texture.Update();
-                }
-
-                vtkPoints points = vtkPoints.New();
-                for (int i = 0; i < 20; i++)
-                {
-                    for (int j = 0; j < 20; j++)
-                    {
-                        double x = 0.1 * i;
-                        double y = 0.1 * j;
-                        points.InsertNextPoint(i, j, Math.Exp((x - 1) * (x - 1) + (y - 1) * (y - 1)));
-                    }
-                }
-
-                vtkPolyData polyData = vtkPolyData.New();
-                polyData.SetPoints(points);
-
-                // 点云
-                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
-                glyphFilter.SetInputData(polyData);
-                glyphFilter.Update();
-
-                vtkDelaunay2D delaunay = vtkDelaunay2D.New();
-                delaunay.SetInputData(glyphFilter.GetOutput());
-                delaunay.Update();
-
-                // 平面
-                vtkPlaneSource plane = vtkPlaneSource.New();
-                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
-                mapper.ScalarVisibilityOff();
-                vtkTextureMapToPlane texturemap = vtkTextureMapToPlane.New();
-                texturemap.SetInputConnection(delaunay.GetOutputPort());
-                mapper.SetInputConnection(texturemap.GetOutputPort());
-
-                actor = vtkActor.New();
-                actor.SetMapper(mapper);
-                actor.SetTexture(texture);
-                renWin.RemoveRenderer(render);
-                render = vtkRenderer.New();
-                render.AddActor(actor);
-                render.SetBackground(0.1, 0.2, 0.4);
-                render.ResetCamera();
-                renWin.AddRenderer(render);
-                renWin.Render();
-
-                // 相机
-                camera = render.GetActiveCamera();
-            }
-        }
-
         private void VtkShrinkPolyData_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog
@@ -869,6 +774,109 @@ namespace VtkWpfDemo
             camera = render.GetActiveCamera();
         }
 
+        private void VtkTexture_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Title = "选择图片文件",
+                Filter = "图片文件|*.jpg;*.bmp;*.png",
+                InitialDirectory = Environment.CurrentDirectory,
+            };
+            if (dlg.ShowDialog() == true)
+            {
+                //vtkJPEGReader jpg = vtkJPEGReader.New();
+                //jpg.SetFileName(dlg.FileName);
+                //jpg.Update();
+                vtkImageReader2 reader = vtkImageReader2Factory.CreateImageReader2(dlg.FileName);
+                reader.SetFileName(dlg.FileName);
+                reader.Update();
+
+                //vtkImageFlip flipX = vtkImageFlip.New();
+                //flipX.SetInputConnection(reader.GetOutputPort());
+                //flipX.SetFilteredAxes(0);
+                //flipX.Update();
+
+                //vtkImageFlip flipXY = vtkImageFlip.New();
+                //flipXY.SetInputConnection(flipX.GetOutputPort());
+                //flipXY.SetFilteredAxes(2);
+                //flipXY.Update();
+
+                var dim = reader.GetOutput().GetDimensions();
+                if (dim[0] > dim[1])
+                {
+                    texture = vtkTexture.New();
+                    texture.SetInputConnection(reader.GetOutputPort());
+                    texture.InterpolateOn();
+                    texture.Update();
+                }
+                else
+                {
+                    vtkImageReslice reslice = vtkImageReslice.New();
+                    reslice.SetInputConnection(reader.GetOutputPort());
+                    reslice.SetResliceAxesDirectionCosines(0, 1, 0, -1, 0, 0, 0, 0, 1);  // 旋转矩阵
+                    reslice.Update();
+
+                    texture = vtkTexture.New();
+                    texture.SetInputConnection(reslice.GetOutputPort());
+                    texture.InterpolateOn();
+                    texture.Update();
+                }
+
+                vtkPoints points = vtkPoints.New();
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 20; j++)
+                    {
+                        double x = 0.1 * i;
+                        double y = 0.1 * j;
+                        points.InsertNextPoint(i, j, Math.Exp((x - 1) * (x - 1) + (y - 1) * (y - 1)));
+                    }
+                }
+
+                vtkXMLPolyDataReader rd = vtkXMLPolyDataReader.New();
+                rd.SetFileName(@"Files\laser.vtp");
+                rd.Update();
+                vtkPoissonDiskSampler poisson = vtkPoissonDiskSampler.New();
+                poisson.SetInputData(rd.GetOutput());
+                poisson.SetRadius(0.3);
+                poisson.Update();
+
+                vtkPolyData polyData = vtkPolyData.New();
+                polyData.SetPoints(points);
+
+                // 点云
+                vtkVertexGlyphFilter glyphFilter = vtkVertexGlyphFilter.New();
+                glyphFilter.SetInputData(polyData);
+                glyphFilter.Update();
+
+                vtkDelaunay2D delaunay = vtkDelaunay2D.New();
+                delaunay.SetInputData(poisson.GetOutput());
+                delaunay.Update();
+
+                // 平面
+                vtkPlaneSource plane = vtkPlaneSource.New();
+                vtkPolyDataMapper mapper = vtkPolyDataMapper.New();
+                mapper.ScalarVisibilityOff();
+                vtkTextureMapToPlane texturemap = vtkTextureMapToPlane.New();
+                texturemap.SetInputConnection(delaunay.GetOutputPort());
+                mapper.SetInputConnection(texturemap.GetOutputPort());
+
+                actor = vtkActor.New();
+                actor.SetMapper(mapper);
+                actor.SetTexture(texture);
+                renWin.RemoveRenderer(render);
+                render = vtkRenderer.New();
+                render.AddActor(actor);
+                render.SetBackground(0.1, 0.2, 0.4);
+                render.ResetCamera();
+                renWin.AddRenderer(render);
+                renWin.Render();
+
+                // 相机
+                camera = render.GetActiveCamera();
+            }
+        }
+
         private void VtkImageData_Click(object sender, RoutedEventArgs e)
         {
             vtkXMLPolyDataReader reader = vtkXMLPolyDataReader.New();
@@ -885,11 +893,11 @@ namespace VtkWpfDemo
             double x = bounds[1] - bounds[0];
             imageData.SetDimensions(w, h, 1);
             // 最后显示的图像xyz方向比例要合适
-            imageData.SetSpacing(x, y, 1);
+            imageData.SetSpacing(x/w, y/h, 1);
             imageData.AllocateScalars(11, 1);
             vtkDataArray scalars = imageData.GetPointData().GetScalars();
             // 这个参数也很重要，可以表征高度，值越大越高，可以认为xy方向步长为1
-            double scale = 2000;
+            double scale = 1;
             int index = 0;
             for (int i = 0; i < w; i++)
             {

@@ -61,8 +61,8 @@
             <wff:Button Content="vtkExtractSurface 曲面重建"
                         Click="VtkExtractSurface_Click"
                         Margin="5" />
-            <wff:Button Content="图片纹理"
-                        Click="TextureMap_Click"
+            <wff:Button Content="vtkTexture 图片纹理"
+                        Click="VtkTexture_Click"
                         Margin="5" />
             <wff:Button Content="vtkImageData 显示图像数据"
                         Click="VtkImageData_Click"
