@@ -65,5 +65,6 @@ WPF 测试项目，第三方库使用案例
 62. CsvExport 写 csv 格式文件；
 63. VTK Wpf；
 64. Hashids 加密ID；
-65. 
+65. Magick.NET 图像处理；
+66. 
 
