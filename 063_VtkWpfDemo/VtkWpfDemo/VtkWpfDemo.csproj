@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Wff.Controls">
+      <HintPath>..\..\..\Dlls\Wff.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Wff.VtkWpf">
       <HintPath>..\..\..\Dlls\Wff.VtkWpf.dll</HintPath>
-    </Reference>
-    <Reference Include="WffControls">
-      <HintPath>..\..\..\Dlls\WffControls.dll</HintPath>
     </Reference>
   </ItemGroup>
 

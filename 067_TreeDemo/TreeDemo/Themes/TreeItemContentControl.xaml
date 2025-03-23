@@ -1,0 +1,251 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:TreeDemo.Controls">
+
+    <Style x:Key="ClearToggleStyle"
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Background="Transparent"
+                            BorderThickness="0">
+                        <ContentControl Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        SnapsToDevicePixels="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ClearListItemStyle"
+           TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border Background="Transparent"
+                            BorderThickness="0">
+                        <ContentControl Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        SnapsToDevicePixels="True" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="Icon_Template">
+        <Grid x:Name="root"
+              MinHeight="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid x:Name="r1"
+                  Margin="0,0,0,1"
+                  HorizontalAlignment="Left">
+                <Line X2="7.5"
+                      Y2="0"
+                      X1="7.5"
+                      Y1="{Binding ElementName=r1, Path=ActualHeight}"
+                      StrokeThickness="1"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeDashArray="1,1" />
+            </Grid>
+            <Grid x:Name="cross"
+                  Grid.Row="1"
+                  Height="16"
+                  Width="25">
+                <Path Data="M 0.5,0.5 l 15,0 l 0,15 l -15,0 L 0.5,0"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeThickness="1" />
+                <Path x:Name="cross_h"
+                      Data="M 3,7.5 l 9,0"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeThickness="1" />
+                <Path x:Name="cross_v"
+                      Data="M 7.5,3 l 0,9"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeThickness="1" />
+            </Grid>
+            <Grid Grid.RowSpan="3"
+                  VerticalAlignment="Center"
+                  Height="1">
+                <Path x:Name="hline"
+                      Data="M 17,0 l 5,0"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeThickness="1"
+                      StrokeDashArray="1,1" />
+            </Grid>
+            <Grid x:Name="r2"
+                  Grid.Row="2"
+                  Margin="0,1,0,0"
+                  HorizontalAlignment="Left">
+                <Line X1="7.5"
+                      Y1="0"
+                      X2="7.5"
+                      Y2="{Binding ElementName=r2, Path=ActualHeight}"
+                      StrokeThickness="1"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeDashArray="1,1" />
+            </Grid>
+            <Grid x:Name="r"
+                  Grid.RowSpan="3"
+                  Margin="0,1,0,1"
+                  HorizontalAlignment="Left"
+                  Visibility="Collapsed">
+                <Line X1="7.5"
+                      Y1="0"
+                      X2="7.5"
+                      Y2="{Binding ElementName=r, Path=ActualHeight}"
+                      StrokeThickness="1"
+                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                      StrokeDashArray="1,1" />
+            </Grid>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding}"
+                         Value="1">
+                <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="2">
+                <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="3">
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="4">
+                <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="5">
+                <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="6">
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="7">
+                <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="8">
+                <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="r" Property="Visibility" Value="Visible" />
+                <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="9">
+                <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <Style TargetType="{x:Type local:TreeItemContentControl}">
+        <Setter Property="MinHeight" Value="19" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="LightGray" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:TreeItemContentControl}">
+                    <Border x:Name="CellBorder"
+                            Margin="0"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <ListBox ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TreeData.ParentItems}"
+                                         ItemContainerStyle="{StaticResource ClearListItemStyle}"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                         BorderThickness="0"
+                                         Margin="0"
+                                         Padding="0"
+                                         Background="Transparent">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid x:Name="lineGrid"
+                                                  Width="30"
+                                                  Margin="0">
+                                                <Line x:Name="line"
+                                                      X1="7.5"
+                                                      Y1="0"
+                                                      X2="7.5"
+                                                      Y2="{Binding ElementName=lineGrid, Path=ActualHeight}"
+                                                      StrokeThickness="1"
+                                                      Stroke="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TreeItemContentControl}, Path=IconLineStroke}"
+                                                      StrokeDashArray="1,1" />
+                                            </Grid>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsLastItem}"
+                                                             Value="true">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                            <ToggleButton x:Name="ExpanderButton"
+                                          Grid.Column="1"
+                                          Style="{StaticResource ClearToggleStyle}"
+                                          HorizontalAlignment="Left"
+                                          IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TreeData.IsExpanded, Mode=TwoWay}"
+                                          Content="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=TreeData.IconType}"
+                                          ContentTemplate="{StaticResource Icon_Template}"
+                                          Margin="0"
+                                          Padding="0" />
+
+                            <ContentControl Grid.Column="2"
+                                            Content="{TemplateBinding Content}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

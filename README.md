@@ -28,7 +28,7 @@ WPF 测试项目，第三方库使用案例
 25. 日志 Serilog；
 26. DataGrid 根据内容改变文字颜色；
 27. LottieSharp 显示 json 动画；
-28. Dapper 读写数据库；
+28. Dapper、Dommel读写数据库；
 29. RestSharp 请求 Post、Get；
 30. 字符串压缩；
 31. GridSplitter 布局；
@@ -65,6 +65,9 @@ WPF 测试项目，第三方库使用案例
 62. CsvExport 写 csv 格式文件；
 63. VTK Wpf；
 64. Hashids 加密ID；
-65. Magick.NET 图像处理；
-66. 
+65. Magick.NET 处理图像；
+66. SkiaSharp 处理图像；
+67. 树型结构：TreeView、DataGrid；
+68. 连接线样式 TreeView；
+69. 
 

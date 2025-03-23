@@ -1,0 +1,510 @@
+﻿<Window x:Class="TreeDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TreeDemo.Controls"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="450"
+        Width="800">
+    <Grid>
+        <Grid.Resources>
+
+            <local:TreeItemDataConverter x:Key="TreeItemDataConverter" />
+            <local:TreeItemDataConverter x:Key="TreeItemDataTreeConverter"
+                                         UseTree="True" />
+
+            <DataTemplate x:Key="CellTemplate_Name">
+                <local:TreeItemContentControl IconLineStroke="Black"
+                                              Content="{Binding Data.Name}"
+                                              TreeData="{Binding}" />
+            </DataTemplate>
+            <DataTemplate x:Key="CellTemplate_TreeName">
+                <local:TreeItemContentControl IconLineStroke="Black"
+                                              Content="{Binding Data.Name}"
+                                              TreeData="{Binding}"
+                                              BorderThickness="1,0,1,1"
+                                              BorderBrush="LightGray" />
+            </DataTemplate>
+            <DataTemplate x:Key="CellTemplate_P1">
+                <local:TreeGridCell Content="{Binding Data.P1}" />
+            </DataTemplate>
+            <DataTemplate x:Key="CellTemplate_P2">
+                <local:TreeGridCell Content="{Binding Data.P2}" />
+            </DataTemplate>
+            <DataTemplate x:Key="CellTemplate_P3">
+                <local:TreeGridCell Content="{Binding Data.P3}" />
+            </DataTemplate>
+            <DataTemplate x:Key="CellTemplate_P4">
+                <local:TreeGridCell Content="{Binding Data.P4}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Root">
+                <Grid Height="16"
+                      Width="25">
+                    <Border Width="16"
+                            Height="16"
+                            BorderThickness="1"
+                            BorderBrush="Blue"
+                            HorizontalAlignment="Left">
+                        <Path Data="M 2,7 l 10,0 M 7,2 l 0,10"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                    </Border>
+                    <Path Data="M 17,8 l 5,0"
+                          Stroke="Blue"
+                          StrokeThickness="1"
+                          StrokeDashArray="1,1" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Root_Expanded">
+                <Grid Height="16"
+                      Width="25"
+                      Margin="0,5,0,0">
+                    <Border Width="16"
+                            Height="16"
+                            BorderThickness="1"
+                            BorderBrush="Blue"
+                            HorizontalAlignment="Left">
+                        <Path Data="M 2,7 l 10,0"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                    </Border>
+                    <Path Data="M 17,8 l 5,0"
+                          Stroke="Blue"
+                          StrokeThickness="1"
+                          StrokeDashArray="1,1" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Root_Middle">
+                <Grid x:Name="root"
+                      Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="r1"
+                          Margin="0,0,0,1"
+                          HorizontalAlignment="Left">
+                        <Line X2="7.5"
+                              Y2="0"
+                              X1="7.5"
+                              Y1="{Binding ElementName=r1, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="cross"
+                          Grid.Row="1"
+                          Height="16"
+                          Width="25">
+                        <Path Data="M 0.5,0.5 l 15,0 l 0,15 l -15,0 L 0.5,0"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                        <Path x:Name="cross_h"
+                              Data="M 3,7.5 l 9,0"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                        <Path x:Name="cross_v"
+                              Data="M 7.5,3 l 0,9"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                    </Grid>
+                    <Grid Grid.RowSpan="3"
+                          VerticalAlignment="Center"
+                          Height="1">
+                        <Path x:Name="hline"
+                              Data="M 17,0 l 5,0"
+                              Stroke="Blue"
+                              StrokeThickness="1"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="r2"
+                          Grid.Row="2"
+                          Margin="0,1,0,0"
+                          HorizontalAlignment="Left">
+                        <Line X1="7.5"
+                              Y1="0"
+                              X2="7.5"
+                              Y2="{Binding ElementName=r2, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="r"
+                          Grid.RowSpan="3"
+                          Margin="0,1,0,0"
+                          HorizontalAlignment="Left"
+                          Visibility="Collapsed">
+                        <Line X1="7.5"
+                              Y1="0"
+                              X2="7.5"
+                              Y2="{Binding ElementName=root, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="1">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="2">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="3">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="4">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="5">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="6">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="7">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r" Property="Visibility" Value="Visible" />
+                        <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="8">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Root_Middle_Expanded">
+                <Grid Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="r1"
+                          Margin="0,0,0,1">
+                        <Line X1="8"
+                              Y1="0"
+                              X2="8"
+                              Y2="{Binding ElementName=r1, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid Grid.Row="1"
+                          Height="16"
+                          Width="25">
+                        <Border Width="16"
+                                Height="16"
+                                BorderThickness="1"
+                                BorderBrush="Blue"
+                                HorizontalAlignment="Left">
+                            <Path Data="M 2,7 l 10,0"
+                                  Stroke="Blue"
+                                  StrokeThickness="1" />
+                        </Border>
+                        <Path Data="M 17,8 l 5,0"
+                              Stroke="Blue"
+                              StrokeThickness="1"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="r2"
+                          Grid.Row="2"
+                          Margin="0,1,0,0">
+                        <Line X1="8"
+                              Y1="0"
+                              X2="8"
+                              Y2="{Binding ElementName=r2, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Middle">
+                <Grid x:Name="Panel">
+                    <Line X1="8"
+                          Y1="0"
+                          X2="8"
+                          Y2="{Binding ElementName=Panel, Path=ActualHeight}"
+                          StrokeThickness="1"
+                          Stroke="Blue"
+                          StrokeDashArray="1,1" />
+                    <Grid VerticalAlignment="Center"
+                          Height="1">
+                        <Path Data="M 9,0 l 14,0"
+                              Stroke="Blue"
+                              StrokeThickness="1"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Last">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="gridTop">
+                        <Line X1="8"
+                              Y1="0"
+                              X2="8"
+                              Y2="{Binding ElementName=gridTop, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid Grid.RowSpan="2"
+                          Height="1"
+                          VerticalAlignment="Center">
+                        <Path Data="M 9,0 l 14,0"
+                              Stroke="Blue"
+                              StrokeThickness="1"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Icon_Template">
+                <Grid x:Name="root"
+                      Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="r1"
+                          Margin="0,0,0,1"
+                          HorizontalAlignment="Left">
+                        <Line X2="7.5"
+                              Y2="0"
+                              X1="7.5"
+                              Y1="{Binding ElementName=r1, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="cross"
+                          Grid.Row="1"
+                          Height="16"
+                          Width="25">
+                        <Path Data="M 0.5,0.5 l 15,0 l 0,15 l -15,0 L 0.5,0"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                        <Path x:Name="cross_h"
+                              Data="M 3,7.5 l 9,0"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                        <Path x:Name="cross_v"
+                              Data="M 7.5,3 l 0,9"
+                              Stroke="Blue"
+                              StrokeThickness="1" />
+                    </Grid>
+                    <Grid Grid.RowSpan="3"
+                          VerticalAlignment="Center"
+                          Height="1">
+                        <Path x:Name="hline"
+                              Data="M 17,0 l 5,0"
+                              Stroke="Blue"
+                              StrokeThickness="1"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="r2"
+                          Grid.Row="2"
+                          Margin="0,1,0,0"
+                          HorizontalAlignment="Left">
+                        <Line X1="7.5"
+                              Y1="0"
+                              X2="7.5"
+                              Y2="{Binding ElementName=r2, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                    <Grid x:Name="r"
+                          Grid.RowSpan="3"
+                          Margin="0,1,0,0"
+                          HorizontalAlignment="Left"
+                          Visibility="Collapsed">
+                        <Line X1="7.5"
+                              Y1="0"
+                              X2="7.5"
+                              Y2="{Binding ElementName=root, Path=ActualHeight}"
+                              StrokeThickness="1"
+                              Stroke="Blue"
+                              StrokeDashArray="1,1" />
+                    </Grid>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="1">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="2">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="3">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="4">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="5">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="6">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="7">
+                        <Setter TargetName="cross_v" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="8">
+                        <Setter TargetName="r1" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="r" Property="Visibility" Value="Visible" />
+                        <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding}"
+                                 Value="9">
+                        <Setter TargetName="r2" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="cross" Property="Visibility" Value="Collapsed" />
+                        <Setter TargetName="hline" Property="Data" Value="M 9,0 l 14,0" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </Grid.Resources>
+        <!--<Grid Height="100" Width="100">
+            <Polyline Points="0,0 100,100" Stroke="Blue" StrokeDashArray="1,1"  />
+        </Grid>-->
+
+        <StackPanel Margin="0,50,0,0"
+                    HorizontalAlignment="Center">
+            <!--<Grid Height="16"  Width="25">
+                <Border Width="16" Height="16" BorderThickness="1" BorderBrush="Blue" HorizontalAlignment="Left">
+                    <Path Data="M 2,7 l 10,0 M 7,2 l 0,10" Stroke="Blue" StrokeThickness="1"/>
+                </Border>
+                <Path Data="M 17,8 l 5,0" Stroke="Blue" StrokeThickness="1" StrokeDashArray="1,1"/>
+            </Grid>
+
+            <Grid Height="16" Width="25" Margin="0,5,0,0">
+                <Border Width="16" Height="16" BorderThickness="1" BorderBrush="Blue" HorizontalAlignment="Left">
+                    <Path Data="M 2,7 l 10,0" Stroke="Blue" StrokeThickness="1"/>
+                </Border>
+                <Path Data="M 17,8 l 5,0" Stroke="Blue" StrokeThickness="1" StrokeDashArray="1,1"/>
+            </Grid>-->
+
+
+            <!--<ContentControl Margin="0,5,0,0" Height="20" ContentTemplate="{StaticResource Icon_Root}"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Root_Expanded}"/>
+            <ContentControl Margin="0,5,0,0" Height="20" ContentTemplate="{StaticResource Icon_Middle}"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Last}"/>-->
+            <!--<ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="0"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="1"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="2"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="3"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="4"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="5"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="6"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="7"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="8"/>
+            <ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Template}" Content="9"/>-->
+            <!--<ContentControl Margin="0,5,0,0" Height="30" ContentTemplate="{StaticResource Icon_Root_Middle_Expanded}"/>-->
+
+        </StackPanel>
+
+        <Grid Margin="20">
+            <TabControl>
+                <TabItem Header="TreeGrid">
+                    <!--  ColumnMappings，可以绑定对象路径，也可以直接绑定资源名称（为简便起见：资源需要定义在当前控件的直接或间接上级的Resouces中）  -->
+                    <local:TreeGrid x:Name="_list"
+                                    Margin="0"
+                                    FontSize="36"
+                                    BorderThickness="0"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent"
+                                    ItemsSource="{Binding Items, Converter={StaticResource TreeItemDataTreeConverter}, ConverterParameter=Items}"
+                                    ShowCellBorder="True"
+                                    ColumnMappings="Name:CellTemplate_TreeName;P1:Data.P1;P2:CellTemplate_P2;P3:CellTemplate_P3;">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Items}" />
+                        </TreeView.ItemTemplate>
+                    </local:TreeGrid>
+                </TabItem>
+
+                <TabItem Header="TreeDataGrid">
+                    <local:TreeDataGrid ItemsSource="{Binding Items, Converter={StaticResource TreeItemDataConverter}, ConverterParameter=Items}"
+                                        AutoGenerateColumns="False"
+                                        CanUserAddRows="False"
+                                        CanUserDeleteRows="False">
+                        <local:TreeDataGrid.Resources>
+                            <Style TargetType="local:TreeDataGridRow">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsVisible}"
+                                                 Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Margin" Value="0" />
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </local:TreeDataGrid.Resources>
+                        <local:TreeDataGrid.Columns>
+                            <DataGridTemplateColumn Header="Name"
+                                                    CellTemplate="{StaticResource CellTemplate_Name}" />
+                            <DataGridTextColumn Header="P1"
+                                                Binding="{Binding Data.P1}" />
+                            <DataGridTextColumn Header="P2"
+                                                Binding="{Binding Data.P2}" />
+                            <DataGridTextColumn Header="P3"
+                                                Binding="{Binding Data.P3}" />
+                            <DataGridTextColumn Header="P4"
+                                                Binding="{Binding Data.P4}" />
+                        </local:TreeDataGrid.Columns>
+                    </local:TreeDataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+    </Grid>
+</Window>
