@@ -8,6 +8,17 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<BaseOutputPath>bin</BaseOutputPath>
+		 <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		 <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		 <OutputPath>$(BaseOutputPath)</OutputPath>
+	</PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="call postbuild.bat" />
+	</Target>
+
   <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0" />
   </ItemGroup>

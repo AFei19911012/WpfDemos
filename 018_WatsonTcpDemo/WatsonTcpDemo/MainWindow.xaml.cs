@@ -57,13 +57,10 @@ namespace WatsonTcpDemo
                 }
             }
         }
-
-#pragma warning disable CS1998 // 异步方法缺少 "await" 运算符，将以同步方式运行
-        private async Task<SyncResponse> SyncRequestReceived(SyncRequest req)
-#pragma warning restore CS1998 // 异步方法缺少 "await" 运算符，将以同步方式运行
+        private Task<SyncResponse> SyncRequestReceived(SyncRequest req)
         {
             PrintLog(Encoding.UTF8.GetString(req.Data));
-            return new SyncResponse(req, "Hello back at you!");
+            return Task.FromResult(new SyncResponse(req, "Hello back at you!"));
         }
 
         private void ServerConnected(object sender, ConnectionEventArgs args)
@@ -95,7 +92,15 @@ namespace WatsonTcpDemo
             {
                 Server.Start();
             }
-        } 
+        }
+
+        private void OnStopServer(object sender, RoutedEventArgs e)
+        {
+            if (Server.IsListening)
+            {
+                Server.Stop();
+            }
+        }
 
         private async void OnServerSendText(object sender, RoutedEventArgs e)
         {
@@ -129,6 +134,14 @@ namespace WatsonTcpDemo
             if (!Client.Connected)
             {
                 Client.Connect();
+            }
+        }
+
+        private void OnDisconnectServer(object sender, RoutedEventArgs e)
+        {
+            if (Client.Connected)
+            {
+                Client.Disconnect();
             }
         }
 

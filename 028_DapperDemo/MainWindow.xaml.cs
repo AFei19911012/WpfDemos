@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Dommel;
 using Microsoft.Data.Sqlite;
-using System.Data.Common;
 using System.Windows;
 
 namespace DapperDemo
@@ -15,7 +14,7 @@ namespace DapperDemo
         {
             InitializeComponent();
 
-            Init();
+            //Init();
 
             InitDommelAsync();
         }

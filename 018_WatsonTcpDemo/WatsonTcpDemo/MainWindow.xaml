@@ -12,15 +12,17 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <UniformGrid Columns="2">
-            <UniformGrid Rows="4" Margin="10">
+            <UniformGrid Rows="5" Margin="10">
                 <Button Content="启动服务器" Click="OnStartServer"/>
+                <Button Content="停止服务器" Click="OnStopServer"/>
                 <Button Content="发送文本" Click="OnServerSendText"/>
                 <Button Content="发送Metadata" Click="OnServerSendMetadata"/>
                 <Button Content="发送消息并返回信息" Click="OnServerSendAndResponse"/>
             </UniformGrid>
 
-            <UniformGrid Rows="4" Margin="10">
+            <UniformGrid Rows="5" Margin="10">
                 <Button Content="连接服务器" Click="OnConnectServer"/>
+                <Button Content="断开连接服务器" Click="OnDisconnectServer"/>
                 <Button Content="发送文本" Click="OnClientSendText"/>
                 <Button Content="发送Metadata" Click="OnClientSendMetadata"/>
                 <Button Content="发送消息并返回信息" Click="OnClientSendAndResponse"/>
