@@ -37,6 +37,11 @@ namespace S7NetDemo
         {
             if (SiemensPlc.IsConnected)
             {
+
+                SiemensPlc.Write("DB1.DBD10", 1.234f);
+                return;
+
+
                 // Int16   DB1.10
                 ushort val1 = 40000;
                 SiemensPlc.Write("DB1.DBW10", val1);

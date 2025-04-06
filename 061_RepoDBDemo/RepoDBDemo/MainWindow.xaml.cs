@@ -1,5 +1,4 @@
 ﻿using RepoDb;
-using RepoDb.Extensions;
 using System.Data.SQLite;
 using System.Windows;
 
@@ -58,7 +57,7 @@ namespace RepoDBDemo
             var deletedRow = connection.Delete<Person>(1);
 
             // 删除全部
-            var deletedRows = connection.DeleteAll<Person>();
+            //var deletedRows = connection.DeleteAll<Person>();
 
             // 更新
             var person3 = new Person

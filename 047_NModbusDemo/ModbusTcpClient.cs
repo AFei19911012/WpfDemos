@@ -12,7 +12,7 @@ namespace NModbusDemo
         public string IP { get; set; }
         public int Port { get; set; }
         public ushort MaxStringLength { get; set; } = 100;
-        public byte SlaveAddress { get; set; } = 0;
+        public byte SlaveAddress { get; set; } = 1;
         public bool Connected
         {
             get

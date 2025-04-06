@@ -16,7 +16,7 @@ namespace OmronFinsTcpDemo
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             EtherNetPLC ENT = new EtherNetPLC();
-            var re = ENT.Link("127.0.0.1", 6000);
+            var re = ENT.Link("127.0.0.1", 9600);
 
             // 读 short
             var result = ENT.ReadWord("D100", out short data1);
