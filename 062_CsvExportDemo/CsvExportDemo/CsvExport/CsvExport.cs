@@ -83,11 +83,11 @@ namespace CsvExportDemo
         /// <param name="includeHeaderRow">
         /// Whether to include the header row with the columns names in the export
         /// </param>
-        public CsvExport(string columnSeparator = ",", bool includeColumnSeparatorDefinitionPreamble = true, bool includeHeaderRow = true)
+        public CsvExport(string columnSeparator = ",", bool includeHeaderRow = true, bool includeColumnSeparatorDefinitionPreamble = true)
         {
             _columnSeparator = columnSeparator;
-            _includeColumnSeparatorDefinitionPreamble = includeColumnSeparatorDefinitionPreamble;
             _includeHeaderRow = includeHeaderRow;
+            _includeColumnSeparatorDefinitionPreamble = includeColumnSeparatorDefinitionPreamble;
         }
 
         /// <summary>
@@ -205,8 +205,8 @@ namespace CsvExportDemo
         {
             StringBuilder sb = new StringBuilder();
 
-            if (_includeColumnSeparatorDefinitionPreamble)
-                sb.Append("sep=" + _columnSeparator + "\r\n");
+            //if (_includeColumnSeparatorDefinitionPreamble)
+            //    sb.Append("sep=" + _columnSeparator + "\r\n");
 
             foreach (var line in ExportToLines())
             {
@@ -233,6 +233,18 @@ namespace CsvExportDemo
         }
 
         /// <summary>
+        /// Appends to a file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="encoding"></param>
+        public void ExportToFileAppend(string path, Encoding encoding = null)
+        {
+            using var fs = new FileStream(path, FileMode.Append, FileAccess.Write);
+            using var ms = ExportAsMemoryStream(encoding);
+            ms.WriteTo(fs);
+        }
+
+        /// <summary>
         /// Exports as raw bytes.
         /// </summary>
         public byte[] ExportToBytes(Encoding encoding = null)
@@ -251,8 +263,8 @@ namespace CsvExportDemo
 
             using (var sw = new StreamWriter(ms, encoding, 1024, leaveOpen: true))
             {
-                if (_includeColumnSeparatorDefinitionPreamble)
-                    sw.Write("sep=" + _columnSeparator + "\r\n");
+                //if (_includeColumnSeparatorDefinitionPreamble)
+                //    sw.Write("sep=" + _columnSeparator + "\r\n");
 
                 foreach (var line in ExportToLines())
                 {

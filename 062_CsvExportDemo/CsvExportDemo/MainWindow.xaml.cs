@@ -10,7 +10,10 @@ namespace CsvExportDemo
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
             Init();
         }
 
@@ -22,13 +25,26 @@ namespace CsvExportDemo
             myExport["Region"] = "Los Angeles, USA";
             myExport["Sales"] = 100000;
             myExport["Date Opened"] = new DateTime(2003, 12, 31);
-
             myExport.AddRow();
             myExport["Region"] = "Canberra \"in\" Australia";
             myExport["Sales"] = 50000;
             myExport["Date Opened"] = new DateTime(2005, 1, 1, 9, 30, 0);
-
+            myExport.AddRow();
+            myExport["Region"] = "Canberra \"in\" Australia";
+            myExport["Sales"] = 50000;
+            myExport["Date Opened"] = new DateTime(2005, 1, 1, 1, 30, 0);
             myExport.ExportToFile("Somefile.csv");
+
+            var myExport1 = new CsvExport(",", false);
+            myExport1.AddRow();
+            myExport1["Region"] = "Los Angeles";
+            myExport1["Sales"] = 100000;
+            myExport1["Date Opened"] = new DateTime(2003, 12, 31);
+            myExport1.AddRow();
+            myExport1["Region"] = "Canberra \"in\" Australia";
+            myExport1["Sales"] = 50000;
+            myExport1["Date Opened"] = new DateTime(2005, 1, 1, 9, 30, 0);
+            myExport1.ExportToFileAppend("Somefile.csv");
 
 
             var list = new List<Foo>
